@@ -192,9 +192,6 @@ function initialize() {
     //マップ上にポリゴンを表示
     x.setMap(map);
 
-    setTimeout(loop, 1000);//5000ミリ秒後に実行
   }
-
-    loop();
-
+  setInterval(loop, 1000);//5000ミリ秒後に実行
 }
