@@ -28,7 +28,7 @@ function getPosition() {
     // 取得成功した場合
     function(position) {
     posLat = position.coords.latitude;
-    poslng = position.coords.longitude;
+    posLng = position.coords.longitude;
     },
     // 取得失敗した場合
     function(error) {
