@@ -157,7 +157,7 @@ function initialize() {
         //マップ上にポリゴンを表示
         x.setMap(map);
       }
-      setInterval(loop, 5000);//1000ミリ秒後に実行
+      setInterval(loop, 300);//300ミリ秒後に実行
     },
     function(error) {
       switch(error.code) {
