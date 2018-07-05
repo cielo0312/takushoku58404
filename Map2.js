@@ -127,7 +127,7 @@ function initialize() {
           holeLayer2.push(
             //三角関数
             {lat: posLat + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,
-              lng: poslng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
+              lng: posLng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
             );
           }
           //円の終点
