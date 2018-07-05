@@ -1,6 +1,6 @@
 //Map.js
-var posLat;//35.625993799999996;//初期緯度
-var posLng;//139.27856060000002;//初期経度
+//35.625993799999996;//初期緯度
+//139.27856060000002;//初期経度
 
 var googleMaps2JSTS = function(boundaries) {
   //境界線の処理
@@ -122,7 +122,12 @@ function initialize() {
       var loop = function(){//holeLayer2を時間差で表示する
         var holeLayer2 = [];//holeLayer2初期化
         x.setMap(null);//古いポリゴンを除去
-        getPosition();//位置情報取得
+        navigator.geolocation.getCurrentPosition(
+          // 取得成功した場合
+          function(position) {
+          var posLat = position.coords.latitude;
+          var posLng = position.coords.longitude;
+
         for (var i = 1; i < 65538; i++) {
           holeLayer2.push(
             //三角関数
@@ -156,8 +161,30 @@ function initialize() {
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
+      },
+      // 取得失敗した場合
+      function(error) {
+        switch(error.code) {
+          case 1: //PERMISSION_DENIED
+            alert("位置情報の利用が許可されていません");
+            break;
+          case 2: //POSITION_UNAVAILABLE
+            alert("現在位置が取得できませんでした");
+            break;
+          case 3: //TIMEOUT
+            alert("タイムアウトになりました");
+            break;
+          default:
+            alert("その他のエラー(エラーコード:"+error.code+")");
+            break;
+        }
+      },
+      {
+        enableHighAccuracy: true,
       }
-      setInterval(loop, 5000);//300ミリ秒後に実行
+    );
+      }
+      setInterval(loop, 1000);//300ミリ秒後に実行
     },
     function(error) {
       switch(error.code) {
