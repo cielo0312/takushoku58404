@@ -1,9 +1,10 @@
 //Map.js
-//35.625993799999996;//初期緯度
-//139.27856060000002;//初期経度
-
+var holeLayer1 = []; //穴の緯度経度の配列
+var poly2;
+var JSTSpoly2;
+//var ido = 35.625993799999996;
+//var keido = 139.27856060000002;
 var googleMaps2JSTS = function(boundaries) {
-  //境界線の処理
   var coordinates = [];
   for (var i = 0; i < boundaries.getLength(); i++) {
     coordinates.push(new jsts.geom.Coordinate(
@@ -13,11 +14,10 @@ var googleMaps2JSTS = function(boundaries) {
 };
 
 var jsts2googleMaps = function(geometry) {
-  //ジオメトリの処理
   var coordArray = geometry.getCoordinates();
   GMcoords = [];
   for (var i = 0; i < coordArray.length; i++) {
-    GMcoords.push(new google.maps.LatLng(coordArray[i].x, coordArray[i].y));
+      GMcoords.push(new google.maps.LatLng(coordArray[i].x, coordArray[i].y));
   }
   return GMcoords;
 }
@@ -27,8 +27,8 @@ function getPosition() {
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
     function(position) {
-    posLat = position.coords.latitude;
-    posLng = position.coords.longitude;
+      ido = position.coords.latitude;
+      keido = position.coords.longitude;
     },
     // 取得失敗した場合
     function(error) {
@@ -54,18 +54,17 @@ function getPosition() {
 }
 
 function initialize() {
-  //地図の表示
+  //getPosition();
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
     function(position) {
-      var pos_lat = position.coords.latitude;
-      var pos_lng = position.coords.longitude;
-      var mapOptions = {
-        zoom: 20,//地図の大きさ
-        center: new google.maps.LatLng(pos_lat, pos_lng),//中心の位置情報
-      };
-      var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-      var holeLayer1 = []; //穴の緯度経度の配列
+      var ido = position.coords.latitude;
+      var keido = position.coords.longitude;
+  　   //地図の表示
+      var map = new google.maps.Map(document.getElementById('map'), {
+        zoom: 20,
+        center: new google.maps.LatLng(ido,keido),
+      });
       var pos = map.getCenter(); //中心座標の取得
       var lat = pos.lat(); //緯度
       var lng = pos.lng(); //経度
@@ -84,28 +83,22 @@ function initialize() {
       // 穴の緯度経度
       for (var i = 1; i < 65538; i++) {
         holeLayer1.push(
-          //三角関数
-          {lat: lat + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,
-            lng: lng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
-          );
-        }
-        //円の終点
-        holeLayer1.push(holeLayer1[0]);
+          {lat: lat + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: lng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
+        );
+      }
+      holeLayer1.push(holeLayer1[0]);
       var bounds = new google.maps.LatLngBounds();
-      //境界線取得
       var poly1 = new google.maps.Polygon({
-        //ポリゴンの作成
+        // map: map,
         paths: [holeLayer1]
       });
-
       for (var i = 0; i < holeLayer1.length; i++) {
-        //位置情報から境界線を割り振る
         bounds.extend(new google.maps.LatLng(holeLayer1[i].lat, holeLayer1[i].lng));
       }
       var geometryFactory = new jsts.geom.GeometryFactory();
       var JSTSpoly1 = geometryFactory.createPolygon(
         geometryFactory.createLinearRing(googleMaps2JSTS(poly1.getPath())));
-      JSTSpoly1.normalize();//標準化処理
+      JSTSpoly1.normalize();
       var JSTSpolyUnion = JSTSpoly1;//holeLayer1を和集合ポリゴンに代入
       var outputPath = jsts2googleMaps(JSTSpolyUnion);
       var points = [kageLayer, outputPath];//pathを結合する
@@ -122,35 +115,26 @@ function initialize() {
       var loop = function(){//holeLayer2を時間差で表示する
         var holeLayer2 = [];//holeLayer2初期化
         x.setMap(null);//古いポリゴンを除去
-        navigator.geolocation.getCurrentPosition(
-          // 取得成功した場合
-          function(position) {
-          var posLat = position.coords.latitude;
-          var posLng = position.coords.longitude;
-
+        getPosition();
         for (var i = 1; i < 65538; i++) {
           holeLayer2.push(
-            //三角関数
-            {lat: posLat + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,
-              lng: posLng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
-            );
-          }
-          //円の終点
-          holeLayer2.push(holeLayer2[0]);
-        var poly2 = new google.maps.Polygon({
-          //ポリゴンの作成
+            {lat: ido + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: keido + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
+          );
+        }
+        holeLayer2.push(holeLayer2[0]);
+        poly2 = new google.maps.Polygon({
+          // map: map,
           paths: [holeLayer2]
         });
         for (var i = 0; i < holeLayer2.length; i++) {
-          //位置情報から境界線を割り振る
           bounds.extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
         }
-        var JSTSpoly2 = geometryFactory.createPolygon(
+        JSTSpoly2 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
-        JSTSpoly2.normalize();//標準化処理
+        JSTSpoly2.normalize();
         JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
         outputPath = jsts2googleMaps(JSTSpolyUnion);
-        points = [kageLayer, outputPath];//pathの結合
+        points = [kageLayer, outputPath];
         x = new google.maps.Polygon({
           paths: points,
           strokeColor: '#808080',
@@ -161,31 +145,10 @@ function initialize() {
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
-      },
-      // 取得失敗した場合
-      function(error) {
-        switch(error.code) {
-          case 1: //PERMISSION_DENIED
-            alert("位置情報の利用が許可されていません");
-            break;
-          case 2: //POSITION_UNAVAILABLE
-            alert("現在位置が取得できませんでした");
-            break;
-          case 3: //TIMEOUT
-            alert("タイムアウトになりました");
-            break;
-          default:
-            alert("その他のエラー(エラーコード:"+error.code+")");
-            break;
-        }
-      },
-      {
-        enableHighAccuracy: true,
       }
-    );
-      }
-      setInterval(loop, 1000);//300ミリ秒後に実行
+      setInterval(loop, 1000);//5000ミリ秒後に実行
     },
+    // 取得失敗した場合
     function(error) {
       switch(error.code) {
         case 1: //PERMISSION_DENIED
@@ -200,10 +163,10 @@ function initialize() {
         default:
           alert("その他のエラー(エラーコード:"+error.code+")");
           break;
-        }
-      },
-      {
-        enableHighAccuracy: true,
       }
+    },
+    {
+      enableHighAccuracy: true,
+    }
   );
 }
