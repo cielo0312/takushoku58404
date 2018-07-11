@@ -1,10 +1,10 @@
 //Map.js
 var holeLayer1 = []; //穴の緯度経度の配列
-var map;
-var poly2;
+var map; //googleマップの情報を入れる
+var poly2; //holeLayer2の情報を入れる
 var JSTSpoly2;
 var JSTSpolyUnion;
-var x;
+var x; //ポリゴンのオプション
 // 影の緯度経度
 var kageLayer = [
   //時計回り
@@ -116,7 +116,7 @@ function initialize() {
         fillOpacity: 0.9
       });
       x.setMap(map);//mapにポリゴンを表示
-      setInterval(loop,5000);
+      setInterval(loop,300);
     },
     // 取得失敗した場合
     function(error) {
