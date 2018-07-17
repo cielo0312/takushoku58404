@@ -36,7 +36,6 @@ var jsts2googleMaps = function(geometry) {
   }
   return GMcoords;
 }
-
 /*
 function getPosition() {
   // 現在地を取得
@@ -75,9 +74,22 @@ function initialize() {
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
     function(position) {
-      var ido = position.coords.latitude;
-      var keido = position.coords.longitude;
-  　   //地図の表示
+      var ido = position.coords.latitude; //取得した緯度
+      var keido = position.coords.longitude; //取得した経度
+      var gosa = position.coords.accuracy; //取得した精度
+    /*  navigator.geolocation.getCurrentPosition(
+        // 取得成功した場合
+        function(position) {
+          var lat2 = position.coords.latitude;
+          var lng2 = position.coords.longitude;
+          navigator.geolocation.getCurrentPosition(
+            // 取得成功した場合
+            function(position) {
+              var lat3 = position.coords.latitude;
+              var lng3 = position.coords.longitude;
+          */
+      if(gosa <= 30){
+  　   //精度が３０m以下の時にポリゴンを表示
       map = new google.maps.Map(document.getElementById('map'), {
         zoom: 20,
         center: new google.maps.LatLng(ido,keido),
@@ -116,7 +128,12 @@ function initialize() {
         fillOpacity: 0.9
       });
       x.setMap(map);//mapにポリゴンを表示
-      setInterval(loop,300);
+      setInterval(loop,5000);
+    }else{
+      //精度が３１m以上のときもう一度取得し直し
+      initialize();
+    }
+      /*
     },
     // 取得失敗した場合
     function(error) {
@@ -139,6 +156,51 @@ function initialize() {
       enableHighAccuracy: true,
     }
   );
+},
+// 取得失敗した場合
+function(error) {
+  switch(error.code) {
+    case 1: //PERMISSION_DENIED
+      alert("位置情報の利用が許可されていません");
+      break;
+    case 2: //POSITION_UNAVAILABLE
+      alert("現在位置が取得できませんでした");
+      break;
+    case 3: //TIMEOUT
+      alert("タイムアウトになりました");
+      break;
+    default:
+      alert("その他のエラー(エラーコード:"+error.code+")");
+      break;
+  }
+},
+{
+  enableHighAccuracy: true,
+}
+);
+*/
+},
+// 取得失敗した場合
+function(error) {
+  switch(error.code) {
+    case 1: //PERMISSION_DENIED
+      alert("位置情報の利用が許可されていません");
+      break;
+    case 2: //POSITION_UNAVAILABLE
+      alert("現在位置が取得できませんでした");
+      break;
+    case 3: //TIMEOUT
+      alert("タイムアウトになりました");
+      break;
+    default:
+      alert("その他のエラー(エラーコード:"+error.code+")");
+      break;
+  }
+},
+{
+  enableHighAccuracy: true,
+}
+);
 }
 
 var loop = function(){//holeLayer2を時間差で表示する
@@ -146,8 +208,11 @@ var loop = function(){//holeLayer2を時間差で表示する
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
     function(position) {
-      var ido2 = position.coords.latitude;
-      var keido2 = position.coords.longitude;
+      var ido2 = position.coords.latitude; //取得した緯度
+      var keido2 = position.coords.longitude; //取得した経度
+      var gosa2 = position.coords.accuracy; //取得した精度
+      if (gosa2 <= 30){
+      //精度が３０m以下のときポリゴンを追加
       for (var i = 1; i < 65538; i++) {
         holeLayer2.push(
           {lat: ido2 + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: keido2 + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
@@ -182,6 +247,10 @@ var loop = function(){//holeLayer2を時間差で表示する
       x.setMap(map);
       map.fitBounds(bounds);
       //setTimeout(loop, 5000);//5000ミリ秒後に実行
+    }else {
+      loop();
+      //精度が３１m以上のときもう一度取得し直し
+    }
     },
     // 取得失敗した場合
     function(error) {
