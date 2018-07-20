@@ -4,6 +4,8 @@ var map; //googleマップの情報を入れる
 var poly2; //holeLayer2の情報を入れる
 var JSTSpoly2;
 var JSTSpolyUnion;
+var points = [];
+var bounds1;
 var x; //ポリゴンのオプション
 // 影の緯度経度
 var kageLayer = [
@@ -80,7 +82,7 @@ function initialize() {
       var ido = position.coords.latitude; //取得した緯度
       var keido = position.coords.longitude; //取得した経度
       var gosa = position.coords.accuracy; //取得した精度
-      if(gosa <= 30){
+      if(gosa <= 50){
   　     //精度が３０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
@@ -155,13 +157,13 @@ function initialize() {
           );
         }
         holeLayer1.push(holeLayer1[0]);
-        var bounds = new google.maps.LatLngBounds();
+        bounds1 = new google.maps.LatLngBounds();
         var poly1 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer1]
         });
         for (var i = 0; i < holeLayer1.length; i++) {
-          bounds.extend(new google.maps.LatLng(holeLayer1[i].lat, holeLayer1[i].lng));
+          bounds1.extend(new google.maps.LatLng(holeLayer1[i].lat, holeLayer1[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
         var JSTSpoly1 = geometryFactory.createPolygon(
@@ -169,7 +171,7 @@ function initialize() {
         JSTSpoly1.normalize();
         JSTSpolyUnion = JSTSpoly1;//holeLayer1を和集合ポリゴンに代入
         var outputPath = jsts2googleMaps(JSTSpolyUnion);
-        var points = [kageLayer, outputPath];//pathを結合する
+        points.push(kageLayer, outputPath);//pathを結合する
         x = new google.maps.Polygon({
           paths: points,
           strokeColor: '#808080',
@@ -216,7 +218,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
       var gosa2 = position.coords.accuracy; //取得した精度
-      if (gosa2 <= 30){
+      if (gosa2 <= 50){
       //精度が３０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
@@ -224,21 +226,26 @@ var loop = function(){//holeLayer2を時間差で表示する
           );
         }
         holeLayer2.push(holeLayer2[0]);
-        var bounds = new google.maps.LatLngBounds();
+        var bounds2 = new google.maps.LatLngBounds();
         poly2 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer2]
         });
         for (var i = 0; i < holeLayer2.length; i++) {
-          bounds.extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
+          bounds2.extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
         JSTSpoly2 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
         JSTSpoly2.normalize();
-        JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
-        var outputPath = jsts2googleMaps(JSTSpolyUnion);
-        var points = [kageLayer, outputPath];
+        var response = bounds1.intersects(bounds2) ;
+        if (response){
+          JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
+          points[1] = jsts2googleMaps(JSTSpolyUnion);
+        }else {
+          var outputPath2 = jsts2googleMaps(JSTSpoly2);
+          points.push(outputPath2);
+        }
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
           paths: points,
