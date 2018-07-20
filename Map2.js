@@ -85,7 +85,7 @@ function initialize() {
       var keido = position.coords.longitude; //取得した経度
       var gosa = position.coords.accuracy; //取得した精度
       if(gosa <= 50){
-  　     //精度が３０m以下の時にポリゴンを表示
+  　     //精度が５０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
           center: new google.maps.LatLng(ido,keido),
@@ -221,7 +221,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       var keido2 = position.coords.longitude; //取得した経度
       var gosa2 = position.coords.accuracy; //取得した精度
       if (gosa2 <= 50){
-      //精度が３０m以下のときポリゴンを追加
+      //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
             {lat: ido2 + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: keido2 + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
@@ -245,9 +245,12 @@ var loop = function(){//holeLayer2を時間差で表示する
           JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
           points[1] = jsts2googleMaps(JSTSpolyUnion);
         }else {
+          points[1] += jsts2googleMaps(JSTSpoly2);
+          /*
           extraPath[count] = jsts2googleMaps(JSTSpoly2);
           points.push(extraPath[count]);
           count++;
+          */
         }
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
@@ -264,7 +267,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
       }else {
         loop();
-        //精度が３１m以上のときもう一度取得し直し
+        //精度が５１m以上のときもう一度取得し直し
       }
     },
     // 取得失敗した場合
