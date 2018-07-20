@@ -6,6 +6,8 @@ var JSTSpoly2;
 var JSTSpolyUnion;
 var points = [];
 var bounds1;
+var extraPath = [];
+var count = 0;
 var x; //ポリゴンのオプション
 // 影の緯度経度
 var kageLayer = [
@@ -243,8 +245,9 @@ var loop = function(){//holeLayer2を時間差で表示する
           JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
           points[1] = jsts2googleMaps(JSTSpolyUnion);
         }else {
-          var outputPath2 = jsts2googleMaps(JSTSpoly2);
-          points.push(outputPath2);
+          extraPath[count] = jsts2googleMaps(JSTSpoly2);
+          points.push(extraPath[count]);
+          count++;
         }
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
