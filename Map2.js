@@ -2,13 +2,15 @@
 var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
 var poly2; //holeLayer2の情報を入れる
-var JSTSpoly2;
-var JSTSpolyUnion;
+var JSTSpoly = [];
+var holePoly = [];
 var points = [];
-var bounds1;
+var bounds = [];
+var outputPath;
 var extraPath = [];
 var count = 0;
 var x; //ポリゴンのオプション
+var c = 1;
 // 影の緯度経度
 var kageLayer = [
   //時計回り
@@ -84,7 +86,7 @@ function initialize() {
       var ido = position.coords.latitude; //取得した緯度
       var keido = position.coords.longitude; //取得した経度
       var gosa = position.coords.accuracy; //取得した精度
-      if(gosa <= 50){
+      if(gosa <= 25){
   　     //精度が５０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
@@ -159,21 +161,21 @@ function initialize() {
           );
         }
         holeLayer1.push(holeLayer1[0]);
-        bounds1 = new google.maps.LatLngBounds();
+        bounds[0] = new google.maps.LatLngBounds();
         var poly1 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer1]
         });
         for (var i = 0; i < holeLayer1.length; i++) {
-          bounds1.extend(new google.maps.LatLng(holeLayer1[i].lat, holeLayer1[i].lng));
+          bounds[0].extend(new google.maps.LatLng(holeLayer1[i].lat, holeLayer1[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
         var JSTSpoly1 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly1.getPath())));
         JSTSpoly1.normalize();
-        JSTSpolyUnion = JSTSpoly1;//holeLayer1を和集合ポリゴンに代入
-        var outputPath = jsts2googleMaps(JSTSpolyUnion);
-        points.push(kageLayer, outputPath);//pathを結合する
+        holePoly[0] = JSTSpoly1;//holeLayer1を和集合ポリゴンに代入
+        outputPath = jsts2googleMaps(holePoly[0]);
+        points = [kageLayer, outputPath];//pathを結合する
         x = new google.maps.Polygon({
           paths: points,
           strokeColor: '#808080',
@@ -214,13 +216,14 @@ function initialize() {
 
 var loop = function(){//holeLayer2を時間差で表示する
   var holeLayer2 = [];//holeLayer2初期化
+  var e = 0;
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
     function(position) {
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
       var gosa2 = position.coords.accuracy; //取得した精度
-      if (gosa2 <= 50){
+      if (gosa2 <= 25){
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
@@ -228,29 +231,37 @@ var loop = function(){//holeLayer2を時間差で表示する
           );
         }
         holeLayer2.push(holeLayer2[0]);
-        var bounds2 = new google.maps.LatLngBounds();
+        bounds[1] = new google.maps.LatLngBounds();
         poly2 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer2]
         });
         for (var i = 0; i < holeLayer2.length; i++) {
-          bounds2.extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
+          bounds[1].extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
-        JSTSpoly2 = geometryFactory.createPolygon(
+        JSTSpoly[c] = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
-        JSTSpoly2.normalize();
-        var response = bounds1.intersects(bounds2) ;
-        if (response){
-          JSTSpolyUnion = JSTSpolyUnion.union(JSTSpoly2);//和集合を取る
-          points[1] = jsts2googleMaps(JSTSpolyUnion);
-        }else {
-          points[1] += jsts2googleMaps(JSTSpoly2);
+        JSTSpoly[c].normalize();
+        for(var i = 0; i < bounds.length - 1; i++){
+          var response = bounds[i].intersects(bounds[c]) ;
+          if (response){
+            holePoly[i] = holePoly[i].union(JSTSpoly[c]);//和集合を取る
+            points[1] = jsts2googleMaps(JSTSpolyUnion);
+            bounds[i] = bounds[i].union(bounds[c]);
+          }else{
+            e++;
           /*
           extraPath[count] = jsts2googleMaps(JSTSpoly2);
           points.push(extraPath[count]);
           count++;
           */
+          }
+        }
+        if (e == c){
+          holePoly[c] = jsts2googleMaps(JSTSpoly[c]);
+          points.push(holePoly[c]);
+          c++;
         }
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
