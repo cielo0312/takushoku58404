@@ -221,7 +221,7 @@ var loop = function(){//holeLayer2を時間差で表示する
     function(position) {
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
-      var gosa2 = position.coords.accuracy; //取得した精度
+      //var gosa2 = position.coords.accuracy; //取得した精度
       //if (gosa2 <= 25){
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
@@ -230,13 +230,13 @@ var loop = function(){//holeLayer2を時間差で表示する
           );
         }
         holeLayer2.push(holeLayer2[0]);
-        bounds[1] = new google.maps.LatLngBounds();
+        bounds[c] = new google.maps.LatLngBounds();
         poly2 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer2]
         });
         for (var i = 0; i < holeLayer2.length; i++) {
-          bounds[1].extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
+          bounds[c].extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
         JSTSpoly[c] = geometryFactory.createPolygon(
