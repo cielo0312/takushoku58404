@@ -187,7 +187,6 @@ function initialize() {
         x.setMap(map);//mapにポリゴンを表示
         setInterval(loop,5000);
       /*}else{
-      //精度が３１m以上のときもう一度取得し直し
         initialize();
       }*/
     },
@@ -278,7 +277,6 @@ var loop = function(){//holeLayer2を時間差で表示する
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
       //}else {
         //loop();
-        //精度が５１m以上のときもう一度取得し直し
       //}
     },
     // 取得失敗した場合
