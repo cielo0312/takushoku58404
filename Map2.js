@@ -247,7 +247,7 @@ var loop = function(){//holeLayer2を時間差で表示する
           var response = bounds[i].intersects(bounds[c]) ;
           if (response){
             holePoly[i] = holePoly[i].union(JSTSpoly[c]);//和集合を取る
-            points[1] = jsts2googleMaps(JSTSpolyUnion);
+            points[1] = jsts2googleMaps(holePoly[i]);
             bounds[i] = bounds[i].union(bounds[c]);
           }else{
             e++;
