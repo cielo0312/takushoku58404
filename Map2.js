@@ -86,7 +86,7 @@ function initialize() {
       var ido = position.coords.latitude; //取得した緯度
       var keido = position.coords.longitude; //取得した経度
       var gosa = position.coords.accuracy; //取得した精度
-      if(gosa <= 25){
+      //if(gosa <= 25){
   　     //精度が５０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
@@ -186,10 +186,10 @@ function initialize() {
         });
         x.setMap(map);//mapにポリゴンを表示
         setInterval(loop,5000);
-      }else{
+      /*}else{
       //精度が３１m以上のときもう一度取得し直し
         initialize();
-      }
+      }*/
     },
     // 取得失敗した場合
     function(error) {
@@ -223,7 +223,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
       var gosa2 = position.coords.accuracy; //取得した精度
-      if (gosa2 <= 25){
+      //if (gosa2 <= 25){
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
@@ -276,10 +276,10 @@ var loop = function(){//holeLayer2を時間差で表示する
         x.setMap(map);
         //map.fitBounds(bounds);
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
-      }else {
-        loop();
+      //}else {
+        //loop();
         //精度が５１m以上のときもう一度取得し直し
-      }
+      //}
     },
     // 取得失敗した場合
     function(error) {
