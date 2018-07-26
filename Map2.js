@@ -184,7 +184,7 @@ function initialize() {
           fillOpacity: 0.95
         });
         x.setMap(map);//mapにポリゴンを表示
-        setInterval(loop,5000);
+        loop();
       /*}else{
         initialize();
       }*/
@@ -272,6 +272,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
+        setTimeout(loop,5000);
         //map.fitBounds(bounds);
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
       //}else {
