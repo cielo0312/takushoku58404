@@ -185,7 +185,7 @@ function initialize() {
           fillOpacity: 0.95
         });
         x.setMap(map);//mapにポリゴンを表示
-        setTimeout(loop,1000);
+        loop();
       /*}else{
         initialize();
       }*/
