@@ -246,7 +246,7 @@ var loop = function(){//holeLayer2を時間差で表示する
           var response = bounds[i].intersects(bounds[c]) ; //ポリゴンが重なっているか判別
           if (response){ //重なって入れば
             JSTSpoly[i] = JSTSpoly[i].union(JSTSpoly2);//和集合を取る
-            holePoly[i] = jsts2googleMaps(JSTSpoly[i]); //ポリゴンをgoogle mapに対応させる
+            points[i + 1] = jsts2googleMaps(JSTSpoly[i]); //ポリゴンをgoogle mapに対応させる
             bounds[i] = bounds[i].union(bounds[c]); //境界線を結合
           }else{ //重なっていないとき
             e++;
