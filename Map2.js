@@ -2,7 +2,6 @@
 var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
 var poly2; //holeLayer2の情報を入れる
-var JSTSpoly = [];
 var holePoly = [];
 var points = [];
 var bounds = [];
@@ -239,13 +238,13 @@ var loop = function(){//holeLayer2を時間差で表示する
           bounds[c].extend(new google.maps.LatLng(holeLayer2[i].lat, holeLayer2[i].lng));
         }
         var geometryFactory = new jsts.geom.GeometryFactory();
-        JSTSpoly[c] = geometryFactory.createPolygon(
+        var JSTSpoly2 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
-        JSTSpoly[c].normalize();
+        JSTSpoly2.normalize();
         for(var i = 0; i < bounds.length - 1; i++){
           var response = bounds[i].intersects(bounds[c]) ;
           if (response){
-            holePoly[i] = holePoly[i].union(JSTSpoly[c]);//和集合を取る
+            holePoly[i] = holePoly[i].union(JSTSpoly2);//和集合を取る
             points[1] = jsts2googleMaps(holePoly[i]);
             bounds[i] = bounds[i].union(bounds[c]);
           }else{
@@ -258,7 +257,7 @@ var loop = function(){//holeLayer2を時間差で表示する
           }
         }
         if (e == c){
-          holePoly[c] = jsts2googleMaps(JSTSpoly[c]);
+          holePoly[c] = jsts2googleMaps(JSTSpoly2);
           points.push(holePoly[c]);
           c++;
         }
