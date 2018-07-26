@@ -1,11 +1,11 @@
 //Map.js
 var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
-var poly2; //holeLayer2の情報を入れる
+//var poly2; //holeLayer2の情報を入れる
 var holePoly = [];
 var points = [];
 var bounds = [];
-var outputPath;
+var JSTSpoly = [];
 var extraPath = [];
 var count = 0;
 var x; //ポリゴンのオプション
@@ -172,9 +172,10 @@ function initialize() {
         var JSTSpoly1 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly1.getPath())));
         JSTSpoly1.normalize();
-        holePoly[0] = JSTSpoly1;//holeLayer1を和集合ポリゴンに代入
-        outputPath = jsts2googleMaps(holePoly[0]);
-        points = [kageLayer, outputPath];//pathを結合する
+        JSTSpoly[0] = JSTSpoly1
+        holePoly[0] = jsts2googleMaps(JSTSpoly[0]);//holeLayer1を和集合ポリゴンに代入
+        //outputPath = jsts2googleMaps(holePoly[0]);
+        points = [kageLayer, holePoly[0]];//pathを結合する
         x = new google.maps.Polygon({
           paths: points,
           strokeColor: '#808080',
@@ -184,7 +185,7 @@ function initialize() {
           fillOpacity: 0.95
         });
         x.setMap(map);//mapにポリゴンを表示
-        loop();
+        setTimeout(loop,1000);
       /*}else{
         initialize();
       }*/
@@ -230,7 +231,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         }
         holeLayer2.push(holeLayer2[0]);
         bounds[c] = new google.maps.LatLngBounds();
-        poly2 = new google.maps.Polygon({
+        var poly2 = new google.maps.Polygon({
         // map: map,
           paths: [holeLayer2]
         });
@@ -242,23 +243,19 @@ var loop = function(){//holeLayer2を時間差で表示する
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
         JSTSpoly2.normalize();
         for(var i = 0; i < bounds.length - 1; i++){
-          var response = bounds[i].intersects(bounds[c]) ;
-          if (response){
-            holePoly[i] = holePoly[i].union(JSTSpoly2);//和集合を取る
-            points[1] = jsts2googleMaps(holePoly[i]);
-            bounds[i] = bounds[i].union(bounds[c]);
-          }else{
+          var response = bounds[i].intersects(bounds[c]) ; //ポリゴンが重なっているか判別
+          if (response){ //重なって入れば
+            JSTSpoly[i] = JSTSpoly[i].union(JSTSpoly2);//和集合を取る
+            holePoly[i] = jsts2googleMaps(JSTSpoly[i]); //ポリゴンをgoogle mapに対応させる
+            bounds[i] = bounds[i].union(bounds[c]); //境界線を結合
+          }else{ //重なっていないとき
             e++;
-          /*
-          extraPath[count] = jsts2googleMaps(JSTSpoly2);
-          points.push(extraPath[count]);
-          count++;
-          */
           }
         }
-        if (e == c){
-          holePoly[c] = jsts2googleMaps(JSTSpoly2);
-          points.push(holePoly[c]);
+        if (e == c){ //全てのポリゴンと重ならないとき
+          JSTSpoly[c] = JSTSpoly2;
+          holePoly[c] = jsts2googleMaps(JSTSpoly[c]); //ポリゴンをgoogle mapに対応させる
+          points.push(holePoly[c]); //pointsに追加
           c++;
         }
         x.setMap(null);//古いポリゴンを除去
