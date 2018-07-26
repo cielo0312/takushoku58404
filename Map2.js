@@ -272,7 +272,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
-        setTimeout(loop,5000);
+        setTimeout(loop,1000);
         //map.fitBounds(bounds);
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
       //}else {
