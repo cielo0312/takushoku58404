@@ -218,7 +218,7 @@ var loop = function(){//holeLayer2を時間差で表示する
   var e = 0;
   navigator.geolocation.getCurrentPosition(
     // 取得成功した場合
-    function(position) {
+    function(position){
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
       //var gosa2 = position.coords.accuracy; //取得した精度
@@ -242,8 +242,8 @@ var loop = function(){//holeLayer2を時間差で表示する
         var JSTSpoly2 = geometryFactory.createPolygon(
           geometryFactory.createLinearRing(googleMaps2JSTS(poly2.getPath())));
         JSTSpoly2.normalize();
-        for(var i = 0; i < bounds.length - 1; i++){
-          var response = bounds[i].intersects(bounds[c]) ; //ポリゴンが重なっているか判別
+        for (var i = 0; i < bounds.length - 1; i++){
+          var response = bounds[i].intersects(bounds[c]); //ポリゴンが重なっているか判別
           if (response){ //重なって入れば
             JSTSpoly[i] = JSTSpoly[i].union(JSTSpoly2);//和集合を取る
             points[i + 1] = jsts2googleMaps(JSTSpoly[i]); //ポリゴンをgoogle mapに対応させる
@@ -258,6 +258,21 @@ var loop = function(){//holeLayer2を時間差で表示する
           points.push(holePoly[c]); //pointsに追加
           c++;
         }
+
+        //ポリゴンとポリゴンが繋がったときの処理
+        for (var j = 0; j < holePoly.length; j++){
+          for (var k = 0; k < holePoly.length; k++){
+            if (j != k){
+              var response = bounds[j].intersects(bounds[k]);
+              if (response){
+                JSTSpoly[j] = JSTSpoly[j].union(JSTSpoly[k]);//和集合を取る
+                points[j + 1] = jsts2googleMaps(JSTSpoly[j]); //ポリゴンをgoogle mapに対応させる
+                bounds[j] = bounds[j].union(bounds[k]); //境界線を結合
+              }
+            }
+          }
+        }
+
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
           paths: points,
@@ -269,7 +284,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
-        setTimeout(loop,1000);
+        setTimeout(loop,5000);
         //map.fitBounds(bounds);
         //setTimeout(loop, 5000);//5000ミリ秒後に実行
       //}else {
