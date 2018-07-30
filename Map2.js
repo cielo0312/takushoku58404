@@ -1,17 +1,16 @@
 //Map.js
 var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
-//var poly2; //holeLayer2の情報を入れる
-var holePoly = [];
-var points = [];
-var bounds = [];
-var JSTSpoly = [];
-var extraPath = [];
-var count = 0;
+var holePoly = []; //穴の配列
+var points = []; //地図に表示するポリゴンの配列
+var bounds = []; //境界線の配列
+var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
 var c = 1;
-// 影の緯度経度
-var kageLayer = [
+var lat25 = 0.00022457872; //緯度２５m
+var lng25 = 0.00027415956; //経度２５m
+var angle = 3.6;//100角形の内角
+var kageLayer = [ // 影の緯度経度
   //時計回り
   {lat: 46.33, lng: 148.4508},
   {lat: 24.26, lng: 148.4508},
@@ -19,14 +18,6 @@ var kageLayer = [
   {lat: 46.33, lng: 125.5911},
   {lat: 46.33, lng: 148.4508},
 ];
-var lat25 = 0.00022457872; //緯度２５m
-var lng25 = 0.00027415956; //経度２５m
-var angle = 3.6;//100
-//0.072;500
-//0.036;10000
-//var angle = 0.00549316406; //角度 65537
-//var ido = 35.625993799999996;
-//var keido = 139.27856060000002;
 var googleMaps2JSTS = function(boundaries) {
   var coordinates = [];
   for (var i = 0; i < boundaries.getLength(); i++) {
@@ -44,38 +35,6 @@ var jsts2googleMaps = function(geometry) {
   }
   return GMcoords;
 }
-/*
-function getPosition() {
-  // 現在地を取得
-  navigator.geolocation.getCurrentPosition(
-    // 取得成功した場合
-    function(position) {
-      ido = position.coords.latitude;
-      keido = position.coords.longitude;
-    },
-    // 取得失敗した場合
-    function(error) {
-      switch(error.code) {
-        case 1: //PERMISSION_DENIED
-          alert("位置情報の利用が許可されていません");
-          break;
-        case 2: //POSITION_UNAVAILABLE
-          alert("現在位置が取得できませんでした");
-          break;
-        case 3: //TIMEOUT
-          alert("タイムアウトになりました");
-          break;
-        default:
-          alert("その他のエラー(エラーコード:"+error.code+")");
-          break;
-      }
-    },
-    {
-  		enableHighAccuracy: true,
-  	}
-  );
-}
-*/
 
 function initialize() {
   //getPosition();
@@ -88,7 +47,7 @@ function initialize() {
       console.log("最初の緯度:"+ ido);
       console.log("最初の経度:"+ keido);
       console.log("最初の精度:"+ gosa);
-      //if(gosa <= 25){
+      if(gosa <= 25){
   　     //精度が５０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
@@ -178,7 +137,6 @@ function initialize() {
         JSTSpoly1.normalize();
         JSTSpoly[0] = JSTSpoly1
         holePoly[0] = jsts2googleMaps(JSTSpoly[0]);//holeLayer1を和集合ポリゴンに代入
-        //outputPath = jsts2googleMaps(holePoly[0]);
         points = [kageLayer, holePoly[0]];//pathを結合する
         x = new google.maps.Polygon({
           paths: points,
@@ -190,9 +148,9 @@ function initialize() {
         });
         x.setMap(map);//mapにポリゴンを表示
         setTimeout(loop,5000);
-      /*}else{
+      }else{
         initialize();
-      }*/
+      }
     },
     // 取得失敗した場合
     function(error) {
@@ -229,7 +187,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       console.log("緯度:"+ ido2);
       console.log("経度:"+ keido2);
       console.log("精度:"+ gosa2);
-      //if (gosa2 <= 25){
+      if (gosa2 <= 25){
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
@@ -294,9 +252,9 @@ var loop = function(){//holeLayer2を時間差で表示する
         x.setMap(map);
         console.log(bounds);
         setTimeout(loop,5000);
-      //}else {
-        //loop();
-      //}
+      }else {
+        loop();
+      }
     },
     // 取得失敗した場合
     function(error) {
