@@ -125,7 +125,6 @@ function initialize() {
         holeLayer1.push(holeLayer1[0]);
         bounds[0] = new google.maps.LatLngBounds();
         var poly1 = new google.maps.Polygon({
-        // map: map,
           paths: [holeLayer1]
         });
         for (var i = 0; i < holeLayer1.length; i++) {
