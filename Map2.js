@@ -85,6 +85,9 @@ function initialize() {
       var ido = position.coords.latitude; //取得した緯度
       var keido = position.coords.longitude; //取得した経度
       var gosa = position.coords.accuracy; //取得した精度
+      console.log("最初の緯度:"+ ido);
+      console.log("最初の経度:"+ keido);
+      console.log("最初の精度:"+ gosa);
       //if(gosa <= 25){
   　     //精度が５０m以下の時にポリゴンを表示
         map = new google.maps.Map(document.getElementById('map'), {
@@ -153,6 +156,7 @@ function initialize() {
         var pos = map.getCenter(); //中心座標の取得
         var lat = pos.lat(); //緯度
         var lng = pos.lng(); //経度
+
         // 穴の緯度経度
         for (var i = 1; i < 101; i++) {//65538
           holeLayer1.push(
@@ -185,7 +189,7 @@ function initialize() {
           fillOpacity: 0.95
         });
         x.setMap(map);//mapにポリゴンを表示
-        loop();
+        setTimeout(loop,5000);
       /*}else{
         initialize();
       }*/
@@ -221,7 +225,10 @@ var loop = function(){//holeLayer2を時間差で表示する
     function(position){
       var ido2 = position.coords.latitude; //取得した緯度
       var keido2 = position.coords.longitude; //取得した経度
-      //var gosa2 = position.coords.accuracy; //取得した精度
+      var gosa2 = position.coords.accuracy; //取得した精度
+      console.log("緯度:"+ ido2);
+      console.log("経度:"+ keido2);
+      console.log("精度:"+ gosa2);
       //if (gosa2 <= 25){
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
@@ -267,7 +274,7 @@ var loop = function(){//holeLayer2を時間差で表示する
               if (response){
                 JSTSpoly[j] = JSTSpoly[j].union(JSTSpoly[k]);//和集合を取る
                 points[j + 1] = jsts2googleMaps(JSTSpoly[j]); //ポリゴンをgoogle mapに対応させる
-                points.splice(k + 1, 1);
+                points.splice(k + 1, 1); //ポリゴンを削除
                 bounds[j] = bounds[j].union(bounds[k]); //境界線を結合
               }
             }
@@ -285,9 +292,8 @@ var loop = function(){//holeLayer2を時間差で表示する
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
+        console.log(bounds);
         setTimeout(loop,5000);
-        //map.fitBounds(bounds);
-        //setTimeout(loop, 5000);//5000ミリ秒後に実行
       //}else {
         //loop();
       //}
