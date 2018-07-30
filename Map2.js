@@ -267,6 +267,7 @@ var loop = function(){//holeLayer2を時間差で表示する
               if (response){
                 JSTSpoly[j] = JSTSpoly[j].union(JSTSpoly[k]);//和集合を取る
                 points[j + 1] = jsts2googleMaps(JSTSpoly[j]); //ポリゴンをgoogle mapに対応させる
+                points.splice(k + 1, 1);
                 bounds[j] = bounds[j].union(bounds[k]); //境界線を結合
               }
             }
