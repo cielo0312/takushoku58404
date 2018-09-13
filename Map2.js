@@ -10,6 +10,8 @@ var c = 1;
 var lat25 = 0.00022457872; //緯度２５m
 var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
+var image ='star.png';
+var flag = 0;
 var kageLayer = [ // 影の緯度経度
   //時計回り
   {lat: 46.33, lng: 148.4508},
@@ -75,7 +77,7 @@ function initialize() {
               {
                 "visibility": "on"
               },{
-                "color": "#9F945F"
+                "color": "#00FF41"
               }
             ]
           },
@@ -139,13 +141,18 @@ function initialize() {
         points = [kageLayer, holePoly[0]];//pathを結合する
         x = new google.maps.Polygon({
           paths: points,
-          strokeColor: '#808080',
-          strokeOpacity: 0.95,
+          strokeColor: '#FFFFFF',
+          strokeOpacity: 1.0,
           strokeWeight: 2,
-          fillColor: '#808080',
-          fillOpacity: 0.95
+          fillColor: '#FFFFFF',
+          fillOpacity: 1.0
         });
-        x.setMap(map);//mapにポリゴンを表示
+
+      x.setMap(map);//mapにポリゴンを表示
+      map.addListener('click', function(e) {
+        getClickLatLng(e.latLng, map);
+      });
+
         setTimeout(loop,5000);
       }else{
         initialize();
@@ -172,6 +179,33 @@ function initialize() {
       enableHighAccuracy: true,
     }
   );
+}
+
+function getClickLatLng(lat_lng, map) {
+  var element = document.getElementById( "target" ) ;
+  var radioNodeList = element.hoge ;
+  var a = radioNodeList.value ;
+  if(a == "アイコン"){
+      // マーカーを設置
+      var marker = new google.maps.Marker({
+        position: lat_lng,
+        map: map,
+        icon: image
+      });
+
+      // 座標の中心をずらす
+      map.panTo(lat_lng);
+  }else{
+    //コメント
+    var comment = window.prompt("何かひとこと", "");
+    if(comment != "" && comment != null){
+    var iw = new google.maps.InfoWindow({
+      position: lat_lng,
+      content: comment
+  　　 });
+    iw.open(map);
+    }
+  }
 }
 
 var loop = function(){//holeLayer2を時間差で表示する
@@ -241,11 +275,11 @@ var loop = function(){//holeLayer2を時間差で表示する
         x.setMap(null);//古いポリゴンを除去
         x = new google.maps.Polygon({
           paths: points,
-          strokeColor: '#808080',
-          strokeOpacity: 0.95,
+          strokeColor: '#FFFFFF',
+          strokeOpacity: 1.00,
           strokeWeight: 2,
-          fillColor: '#808080',
-          fillOpacity: 0.95
+          fillColor: '#FFFFFF',
+          fillOpacity: 1.00
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
