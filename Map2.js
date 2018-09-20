@@ -7,6 +7,9 @@ var bounds = []; //境界線の配列
 var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
 var c = 1;
+var iconNo = 0;
+var i = 0;
+var icon = [];
 var lat25 = 0.00022457872; //緯度２５m
 var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
@@ -54,6 +57,7 @@ function initialize() {
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
           center: new google.maps.LatLng(ido,keido),
+          minZoom : 8.5,//３０km
           styles: [{
             "stylers": [
               {
@@ -149,11 +153,12 @@ function initialize() {
         });
 
       x.setMap(map);//mapにポリゴンを表示
-      map.addListener('click', function(e) {
+
+      map.addListener('click', function(e) {//クリックした時の処理
         getClickLatLng(e.latLng, map);
       });
 
-        setTimeout(loop,5000);
+        setTimeout(loop,5000);//５秒後に実行
       }else{
         initialize();
       }
@@ -192,10 +197,18 @@ function getClickLatLng(lat_lng, map) {
         map: map,
         icon: image
       });
-
-      // 座標の中心をずらす
-      map.panTo(lat_lng);
-  }else{
+        marker.addListener('click', function() { // マーカーをクリックしたとき
+          var element2 = document.getElementById( "target" ) ;
+          var radioNodeList2 = element.hoge ;
+          var b = radioNodeList.value ;
+          if (b == "アイコン削除"){
+            marker.setMap(null);//アイコンの削除
+          }
+        });
+      icon[iconNo] = marker;
+      iconNo += 1;
+      icon.setMap(map);//アイコン表示
+  }else if(a == "コメント"){
     //コメント
     var comment = window.prompt("何かひとこと", "");
     if(comment != "" && comment != null){
@@ -203,7 +216,7 @@ function getClickLatLng(lat_lng, map) {
       position: lat_lng,
       content: comment
   　　 });
-    iw.open(map);
+    iw.open(map);//コメントの表示
     }
   }
 }
