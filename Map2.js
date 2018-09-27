@@ -13,7 +13,7 @@ var icon = [];
 var lat25 = 0.00022457872; //緯度２５m
 var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
-var image ='star.png';
+var image ='icon2.png';
 var flag = 0;
 var kageLayer = [ // 影の緯度経度
   //時計回り
@@ -195,7 +195,10 @@ function getClickLatLng(lat_lng, map) {
       var marker = new google.maps.Marker({
         position: lat_lng,
         map: map,
-        icon: image
+        icon: {
+          url: image,
+          scaledSize: new google.maps.Size(100, 100)
+        }
       });
         marker.addListener('click', function() { // マーカーをクリックしたとき
           var element2 = document.getElementById( "target" ) ;

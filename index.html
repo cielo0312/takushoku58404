@@ -1,38 +1,211 @@
 <!DOCTYPE html>
-<html>
+<html lang="ja">
   <head>
-    <title>Data Layer: Polygon</title>
-    <meta name="viewport" content="initial-scale=1.0">
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ファイル選択（カメラ起動）テスト</title>
     <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
+      @import url(http://fonts.googleapis.com/earlyaccess/notosansjapanese.css);
       html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
+          font-size: 16px;
+          font-family: 'Noto Sans Japanese', sans-serif;
+          text-align: center;
       }
+      canvas {
 
+        max-width: 100%;
+        height: auto;
+      }
     </style>
   </head>
   <body>
-    <p>
-      <input type="button" style="width:90%; font-size:50px;" value="冒険地図作成" onclick="initialize()">
-      <form id="target">
-        <input name="hoge" type="radio" value="アイコン">アイコン
-        <input name="hoge" type="radio" value="コメント">コメント
-        <input name="hoge" type="radio" value="アイコン削除">アイコン削除
-      </form>
-    </p>
-    <div id="map"></div>
-    <script type = "text/javascript" src="Map2.js"></script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB7f-0pGCHFUKHf4JLZnQaF2l5_uuFNWE&libraries=geometry">
+    <header>
+      <h1>アイコンテスト</h1>
+    </header>
+    <main>
+      <p><input type="file" accept="image/*" capture="camera" id="file-image"></p>
+      <img id="previewSmall">
+
+    </main>
+    <script src=smartcrop.js></script>
+    <script>
+    (function() {
+      var canvas = document.createElement('canvas');
+      window.onload = function(){
+        if ( checkFileApi() && checkCanvas(canvas) ){
+          //ファイル選択
+          var file_image = document.getElementById('file-image');
+          file_image.addEventListener('change', selectReadfile, false);
+        }
+      }
+      //canvas に対応しているか
+      function checkCanvas(canvas){
+        if (canvas && canvas.getContext){
+          return true;
+        }
+        alert('Not Supported Canvas.');
+        return false;
+      }
+      // FileAPIに対応しているか
+      function checkFileApi() {
+        // Check for the various File API support.
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          // Great success! All the File APIs are supported.
+          return true;
+        }
+        alert('The File APIs are not fully  in this browser.');
+        return false;
+      }
+      //端末がモバイルか
+      var _ua = (function(u){
+        var mobile = {
+                  0: (u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
+                  || u.indexOf("iphone") != -1
+                  || u.indexOf("ipod") != -1
+                  || (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+                  || (u.indexOf("firefox") != -1 && u.indexOf("mobile") != -1)
+                  || u.indexOf("blackberry") != -1,
+                  iPhone: (u.indexOf("iphone") != -1),
+                  Android: (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+        };
+        var tablet = (u.indexOf("windows") != -1 && u.indexOf("touch") != -1)
+                  || u.indexOf("ipad") != -1
+                  || (u.indexOf("android") != -1 && u.indexOf("mobile") == -1)
+                  || (u.indexOf("firefox") != -1 && u.indexOf("tablet") != -1)
+                  || u.indexOf("kindle") != -1
+                  || u.indexOf("silk") != -1
+                  || u.indexOf("playbook") != -1;
+        var pc = !mobile[0] && !tablet;
+        return {
+          Mobile: mobile,
+          Tablet: tablet,
+          PC: pc
+        };
+      })(window.navigator.userAgent.toLowerCase());
+      //ファイルが選択されたら読み込む
+      function selectReadfile(e) {
+        var file = e.target.files;
+        var reader = new FileReader();
+        //dataURL形式でファイルを読み込む
+        reader.readAsDataURL(file[0]);
+        //ファイルの読込が終了した時の処理
+        reader.onload = function(){
+          readDrawImg(reader, canvas, 0, 0);
+        }
+      }
+      function readDrawImg(reader, canvas, x, y){
+        var img = readImg(reader);
+        img.onload = function(){
+          var w = img.width;
+          var h = img.height;
+          printWidthHeight( 'src-width-height', true, w, h);
+          // モバイルであればリサイズ
+          if(_ua.Mobile[0]){
+            var resize = resizeWidthHeight(1024, w, h);
+            printWidthHeight( 'dst-width-height', resize.flag, resize.w, resize.h);
+            drawImgOnCav(canvas, img, x, y, resize.w, resize.h);
+          }else{
+            // モバイル以外では元サイズ
+            printWidthHeight( 'dst-width-height', false, 0, 0);
+            drawImgOnCav(canvas, img, x, y, w, h);
+          }
+        }
+      }
+      //ファイルの読込が終了した時の処理
+      function readImg(reader){
+        //ファイル読み取り後の処理
+        var result_dataURL = reader.result;
+        var img = new Image();
+        img.src = result_dataURL;
+        return img;
+      }
+      //キャンバスにImageを表示
+      function drawImgOnCav(canvas, img, x, y, w, h) {
+        var img2 = new Image();
+        img2.src = "star4.png";
+        var ctx = canvas.getContext("2d");
+        var options = {width: 95, height: 95};
+        img = median(img);
+        SmartCrop.crop(img, options, function(result) {
+
+
+        // 自動抽出されたトリミング情報を取得
+        var crop = result.topCrop;
+        canvas.width = img2.width;
+        canvas.height = img2.height;
+
+        //取得した座標を使って、画像を書き出し
+        ctx.drawImage(img2, 0, 0, canvas.width, canvas.height);
+        ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 50, 52, options.width, options.height);
+        previewSmall.src = canvas.toDataURL();
+        });
+      }
+      // リサイズ後のwidth, heightを求める
+      function resizeWidthHeight(target_length_px, w0, h0){
+        //リサイズの必要がなければ元のwidth, heightを返す
+        var length = Math.max(w0, h0);
+        if(length <= target_length_px){
+          return{
+            flag: false,
+            w: w0,
+            h: h0
+          };
+        }
+        //リサイズの計算
+        var w1;
+        var h1;
+        if(w0 >= h0){
+          w1 = target_length_px;
+          h1 = h0 * target_length_px / w0;
+        }else{
+          w1 = w0 * target_length_px / h0;
+          h1 = target_length_px;
+        }
+        return {
+          flag: true,
+          w: parseInt(w1),
+          h: parseInt(h1)
+        };
+      }
+      function printWidthHeight( width_height_id, flag, w, h) {
+        var wh = document.getElementById(width_height_id);
+        /*if(!flag){
+          wh.innerHTML = "なし";
+          return;
+        }*/
+        //wh.innerHTML = 'width:' + w + ' height:' + h;
+      }
+
+
+      function median(img){
+        var src_img = img.src;
+        var dst_canvas = document.createElement('DstCanvas');
+        var dst_ctx = dst_canvas.getContext("2d");
+        var value = 16;
+        // Drawing original image (元画像の描画)
+        dst_canvas.width  = src_img.width;
+        dst_canvas.height = src_img.height;
+        dst_ctx.drawImage(src_img,0,0);
+
+        // Generate ImageData (ImageDataの生成)
+        var imagedata = dst_ctx.getImageData(0,0,dst_canvas.width,dst_canvas.height);
+
+        // Obtain color information of image (画像のカラー情報の取得)
+        var colors = getColorInfo(imagedata);
+
+        // reduced color (減色)
+        var MedianCut = new TMedianCut(imagedata,colors);
+        MedianCut.run(value,true);
+
+        // After Colors (減色後の画像の色数)
+        alert(MedianCut.rep_color.length);
+
+        // Draw to canvas (canvasへ描画)
+        dst_ctx.putImageData(imagedata,0,0);
+        img = dst_canvas.toDataURL();
+        return img;
+      }
+    })();
     </script>
-    <script src="jsts.min.js"></script>
-    </body>
+  </body>
 </html>
