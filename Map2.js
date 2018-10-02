@@ -13,7 +13,9 @@ var icon = [];
 var lat25 = 0.00022457872; //緯度２５m
 var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
-var image ='icon2.png';
+var image;
+var gmap;
+var newlatlng;
 var flag = 0;
 var kageLayer = [ // 影の緯度経度
   //時計回り
@@ -52,8 +54,10 @@ function initialize() {
       console.log("最初の緯度:"+ ido);
       console.log("最初の経度:"+ keido);
       console.log("最初の精度:"+ gosa);
+
       if(gosa <= 25){
   　     //精度が５０m以下の時にポリゴンを表示
+        newlatlng = new google.maps.LatLng(ido,keido);
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
           center: new google.maps.LatLng(ido,keido),
@@ -118,10 +122,11 @@ function initialize() {
           }
         ]
         });
+
         var pos = map.getCenter(); //中心座標の取得
         var lat = pos.lat(); //緯度
         var lng = pos.lng(); //経度
-
+        gmap = map;
         // 穴の緯度経度
         for (var i = 1; i < 101; i++) {//65538
           holeLayer1.push(
@@ -153,6 +158,15 @@ function initialize() {
         });
 
       x.setMap(map);//mapにポリゴンを表示
+
+      var canvas = document.createElement('canvas');
+      window.onload = function(){
+        if ( checkFileApi() && checkCanvas(canvas) ){
+          //ファイル選択
+          var file_image = document.getElementById('file-image');
+          file_image.addEventListener('change', selectReadfile, false);
+        }
+      }
 
       map.addListener('click', function(e) {//クリックした時の処理
         getClickLatLng(e.latLng, map);
@@ -191,6 +205,7 @@ function getClickLatLng(lat_lng, map) {
   var radioNodeList = element.hoge ;
   var a = radioNodeList.value ;
   if(a == "アイコン"){
+
       // マーカーを設置
       var marker = new google.maps.Marker({
         position: lat_lng,
@@ -326,4 +341,185 @@ var loop = function(){//holeLayer2を時間差で表示する
       enableHighAccuracy: true,
     }
   );
+}
+
+var canvas = document.createElement('canvas');
+window.onload = function(){
+  if ( checkFileApi() && checkCanvas(canvas) ){
+    //ファイル選択
+    var file_image = document.getElementById('file-image');
+    file_image.addEventListener('change', selectReadfile, false);
+  }
+}
+//canvas に対応しているか
+function checkCanvas(canvas){
+  if (canvas && canvas.getContext){
+    return true;
+  }
+  alert('Not Supported Canvas.');
+  return false;
+}
+// FileAPIに対応しているか
+function checkFileApi() {
+  // Check for the various File API support.
+  if (window.File && window.FileReader && window.FileList && window.Blob) {
+    // Great success! All the File APIs are supported.
+    return true;
+  }
+  alert('The File APIs are not fully  in this browser.');
+  return false;
+}
+//端末がモバイルか
+var _ua = (function(u){
+  var mobile = {
+            0: (u.indexOf("windows") != -1 && u.indexOf("phone") != -1)
+            || u.indexOf("iphone") != -1
+            || u.indexOf("ipod") != -1
+            || (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+            || (u.indexOf("firefox") != -1 && u.indexOf("mobile") != -1)
+            || u.indexOf("blackberry") != -1,
+            iPhone: (u.indexOf("iphone") != -1),
+            Android: (u.indexOf("android") != -1 && u.indexOf("mobile") != -1)
+  };
+  var tablet = (u.indexOf("windows") != -1 && u.indexOf("touch") != -1)
+            || u.indexOf("ipad") != -1
+            || (u.indexOf("android") != -1 && u.indexOf("mobile") == -1)
+            || (u.indexOf("firefox") != -1 && u.indexOf("tablet") != -1)
+            || u.indexOf("kindle") != -1
+            || u.indexOf("silk") != -1
+            || u.indexOf("playbook") != -1;
+  var pc = !mobile[0] && !tablet;
+  return {
+    Mobile: mobile,
+    Tablet: tablet,
+    PC: pc
+  };
+})(window.navigator.userAgent.toLowerCase());
+//ファイルが選択されたら読み込む
+function selectReadfile(e) {
+  var file = e.target.files;
+  var reader = new FileReader();
+  //dataURL形式でファイルを読み込む
+  reader.readAsDataURL(file[0]);
+  //ファイルの読込が終了した時の処理
+  reader.onload = function(){
+    readDrawImg(reader, canvas, 0, 0);
+  }
+}
+function readDrawImg(reader, canvas, x, y){
+  var img = readImg(reader);
+  img.onload = function(){
+    var w = img.width;
+    var h = img.height;
+    printWidthHeight( 'src-width-height', true, w, h);
+    // モバイルであればリサイズ
+    if(_ua.Mobile[0]){
+      var resize = resizeWidthHeight(1024, w, h);
+      printWidthHeight( 'dst-width-height', resize.flag, resize.w, resize.h);
+      drawImgOnCav(canvas, img, x, y, resize.w, resize.h);
+    }else{
+      // モバイル以外では元サイズ
+      printWidthHeight( 'dst-width-height', false, 0, 0);
+      drawImgOnCav(canvas, img, x, y, w, h);
+    }
+  }
+}
+//ファイルの読込が終了した時の処理
+function readImg(reader){
+  //ファイル読み取り後の処理
+  var result_dataURL = reader.result;
+  var img = new Image();
+  img.src = result_dataURL;
+  return img;
+}
+//キャンバスにImageを表示
+function drawImgOnCav(canvas, img, x, y, w, h) {
+  var img2 = new Image();
+  img2.src = "star5.png";
+  var ctx = canvas.getContext("2d");
+  var options = {width: 250, height: 250};
+  //img = median(img);
+  //var ctx2 = document.createElement('canvas2').getContext('2d');
+  // 画像ファイル名、画像読み込み完了後のコールバック関数を指定
+  /*
+  PixelCluster.load(img.src, function(data) {
+  // 解像度
+  var division = 100;
+  console.log("zzzz");
+  // 色数
+  var color =6;
+  // アルゴリズム指定
+  var method = PixelCluster.KMEANS_PP;
+  PixelCluster.perform(division, color, method, function(result) {
+  PixelCluster.render(ctx, division, result);
+  });
+  });
+  */
+  SmartCrop.crop(img, options, function(result) {
+
+
+  // 自動抽出されたトリミング情報を取得
+  var crop = result.topCrop;
+  canvas.width = img2.width;
+  canvas.height = img2.height;
+
+  //取得した座標を使って、画像を書き出し
+  ctx.drawImage(img2, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
+  image = canvas.toDataURL();
+  var marker = new google.maps.Marker({
+    position: newlatlng,
+    map: map,
+    icon: {
+      url: image,
+      scaledSize: new google.maps.Size(100, 100)
+    }
+  });
+    marker.addListener('click', function() { // マーカーをクリックしたとき
+      var element2 = document.getElementById( "target" ) ;
+      var radioNodeList2 = element.hoge ;
+      var b = radioNodeList.value ;
+      if (b == "アイコン削除"){
+        marker.setMap(null);//アイコンの削除
+      }
+    });
+  icon[iconNo] = marker;
+  iconNo += 1;
+  icon.setMap(map);//アイコン表示
+  });
+}
+// リサイズ後のwidth, heightを求める
+function resizeWidthHeight(target_length_px, w0, h0){
+  //リサイズの必要がなければ元のwidth, heightを返す
+  var length = Math.max(w0, h0);
+  if(length <= target_length_px){
+    return{
+      flag: false,
+      w: w0,
+      h: h0
+    };
+  }
+  //リサイズの計算
+  var w1;
+  var h1;
+  if(w0 >= h0){
+    w1 = target_length_px;
+    h1 = h0 * target_length_px / w0;
+  }else{
+    w1 = w0 * target_length_px / h0;
+    h1 = target_length_px;
+  }
+  return {
+    flag: true,
+    w: parseInt(w1),
+    h: parseInt(h1)
+  };
+}
+function printWidthHeight( width_height_id, flag, w, h) {
+  var wh = document.getElementById(width_height_id);
+  /*if(!flag){
+    wh.innerHTML = "なし";
+    return;
+  }*/
+  //wh.innerHTML = 'width:' + w + ' height:' + h;
 }
