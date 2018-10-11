@@ -204,6 +204,7 @@ function getClickLatLng(lat_lng, map) {
   var element = document.getElementById( "target" ) ;
   var radioNodeList = element.hoge ;
   var a = radioNodeList.value ;
+  /*
   if(a == "アイコン"){
 
       // マーカーを設置
@@ -226,7 +227,8 @@ function getClickLatLng(lat_lng, map) {
       icon[iconNo] = marker;
       iconNo += 1;
       icon.setMap(map);//アイコン表示
-  }else if(a == "コメント"){
+      */
+  if(a == "コメント"){
     //コメント
     var comment = window.prompt("何かひとこと", "");
     if(comment != "" && comment != null){
@@ -252,6 +254,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       console.log("経度:"+ keido2);
       console.log("精度:"+ gosa2);
       if (gosa2 <= 25){
+        newlatlng = new google.maps.LatLng(ido2,keido2);
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
@@ -438,25 +441,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
   img2.src = "star5.png";
   var ctx = canvas.getContext("2d");
   var options = {width: 250, height: 250};
-  //img = median(img);
-  //var ctx2 = document.createElement('canvas2').getContext('2d');
-  // 画像ファイル名、画像読み込み完了後のコールバック関数を指定
-  /*
-  PixelCluster.load(img.src, function(data) {
-  // 解像度
-  var division = 100;
-  console.log("zzzz");
-  // 色数
-  var color =6;
-  // アルゴリズム指定
-  var method = PixelCluster.KMEANS_PP;
-  PixelCluster.perform(division, color, method, function(result) {
-  PixelCluster.render(ctx, division, result);
-  });
-  });
-  */
   SmartCrop.crop(img, options, function(result) {
-
 
   // 自動抽出されたトリミング情報を取得
   var crop = result.topCrop;
@@ -472,15 +457,21 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
     map: map,
     icon: {
       url: image,
-      scaledSize: new google.maps.Size(100, 100)
+      scaledSize: new google.maps.Size(200, 200)
     }
   });
     marker.addListener('click', function() { // マーカーをクリックしたとき
       var element2 = document.getElementById( "target" ) ;
-      var radioNodeList2 = element.hoge ;
-      var b = radioNodeList.value ;
+      var radioNodeList2 = element2.hoge ;
+      var b = radioNodeList2.value ;
       if (b == "アイコン削除"){
         marker.setMap(null);//アイコンの削除
+      }
+      else {
+        var irasuto_result = window.confirm("イラストを描きますか？");
+        if (irasuto_result){
+          var subWin = window.open("freeHandWrite2.html","sub","width=1000,height=2000");
+        }
       }
     });
   icon[iconNo] = marker;
