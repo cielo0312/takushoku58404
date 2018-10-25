@@ -16,6 +16,7 @@ var angle = 3.6;//100角形の内角
 var image;
 var gmap;
 var newlatlng;
+var iconPosition;
 var flag = 0;
 var kageLayer = [ // 影の緯度経度
   //時計回り
@@ -55,7 +56,7 @@ function initialize() {
       console.log("最初の経度:"+ keido);
       console.log("最初の精度:"+ gosa);
 
-      if(gosa <= 25){
+      if(gosa <= 30){
   　     //精度が５０m以下の時にポリゴンを表示
         newlatlng = new google.maps.LatLng(ido,keido);
         map = new google.maps.Map(document.getElementById('map'), {
@@ -159,15 +160,6 @@ function initialize() {
 
       x.setMap(map);//mapにポリゴンを表示
 
-      var canvas = document.createElement('canvas');
-      window.onload = function(){
-        if ( checkFileApi() && checkCanvas(canvas) ){
-          //ファイル選択
-          var file_image = document.getElementById('file-image');
-          file_image.addEventListener('change', selectReadfile, false);
-        }
-      }
-
       map.addListener('click', function(e) {//クリックした時の処理
         getClickLatLng(e.latLng, map);
       });
@@ -253,7 +245,7 @@ var loop = function(){//holeLayer2を時間差で表示する
       console.log("緯度:"+ ido2);
       console.log("経度:"+ keido2);
       console.log("精度:"+ gosa2);
-      if (gosa2 <= 25){
+      if (gosa2 <= 30){
         newlatlng = new google.maps.LatLng(ido2,keido2);
       //精度が５０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
@@ -470,14 +462,21 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
       else {
         var irasuto_result = window.confirm("イラストを描きますか？");
         if (irasuto_result){
-          var subWin = window.open("freeHandWrite2.html","sub","width=1000,height=2000");
+          var subWin = window.open("freeHandWrite2.html?=image" +image,"sub","width=1000,height=2000");
+          iconPosition = marker.getPosition();
+          marker.setMap(null);
         }
       }
     });
+    /*
   icon[iconNo] = marker;
   iconNo += 1;
   icon.setMap(map);//アイコン表示
+  */
   });
+  icon[iconNo] = marker;
+  iconNo += 1;
+  icon.setMap(map);//アイコン表示
 }
 // リサイズ後のwidth, heightを求める
 function resizeWidthHeight(target_length_px, w0, h0){
@@ -513,4 +512,85 @@ function printWidthHeight( width_height_id, flag, w, h) {
     return;
   }*/
   //wh.innerHTML = 'width:' + w + ' height:' + h;
+}
+function irasutoka(imgData) {
+  var canvas2 = document.createElement('canvas');
+  var irasutoimg = new Image();
+  irasutoimg.src = imgData
+  var img3 = new Image();
+  img3.src = "star5.png";
+  var ctx = canvas2.getContext("2d");
+  var options = {width: 250, height: 250};
+  canvas2.width = img3.width;
+  canvas2.height = img3.height;
+  //取得した座標を使って、画像を書き出し
+  ctx.drawImage(img3, 0, 0, canvas2.width, canvas2.height);
+  ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
+  image = canvas2.toDataURL();
+  var marker = new google.maps.Marker({
+    position: newlatlng,
+    map: map,
+    icon: {
+      url: image,
+      scaledSize: new google.maps.Size(200, 200)
+    }
+  });
+    marker.addListener('click', function() { // マーカーをクリックしたとき
+      var element2 = document.getElementById( "target" ) ;
+      var radioNodeList2 = element2.hoge ;
+      var b = radioNodeList2.value ;
+      if (b == "アイコン削除"){
+        marker.setMap(null);//アイコンの削除
+      }
+      else {
+        var irasuto_result = window.confirm("イラストを描きますか？");
+        if (irasuto_result){
+          var subWin = window.open("freeHandWrite2.html","sub","width=1000,height=2000");
+          iconPosition = marker.getPosition();
+          marker.setMap(null);
+        }
+      }
+    });
+  icon[iconNo] = marker;
+  iconNo += 1;
+  icon.setMap(map);//アイコン表示
+  /*SmartCrop.crop(imgData, options, function(result) {
+
+  // 自動抽出されたトリミング情報を取得
+  var crop = result.topCrop;
+  canvas2.width = img3.width;
+  canvas2.height = img3.height;
+
+  //取得した座標を使って、画像を書き出し
+  ctx.drawImage(img3, 0, 0, canvas2.width, canvas2.height);
+  ctx.drawImage(imgData, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
+  image = canvas2.toDataURL();
+  var marker = new google.maps.Marker({
+    position: newlatlng,
+    map: map,
+    icon: {
+      url: image,
+      scaledSize: new google.maps.Size(200, 200)
+    }
+  });
+    marker.addListener('click', function() { // マーカーをクリックしたとき
+      var element2 = document.getElementById( "target" ) ;
+      var radioNodeList2 = element2.hoge ;
+      var b = radioNodeList2.value ;
+      if (b == "アイコン削除"){
+        marker.setMap(null);//アイコンの削除
+      }
+      else {
+        var irasuto_result = window.confirm("イラストを描きますか？");
+        if (irasuto_result){
+          var subWin = window.open("freeHandWrite2.html","sub","width=1000,height=2000");
+          iconPosition = marker.getPosition();
+          marker.setMap(null);
+        }
+      }
+    });
+  icon[iconNo] = marker;
+  iconNo += 1;
+  icon.setMap(map);//アイコン表示
+});*/
 }

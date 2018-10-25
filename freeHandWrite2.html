@@ -35,7 +35,8 @@
     ***********************************/
 
 	$(function(){
-
+		var image = location.search;
+		mainimg.src = image;
 		var drawFlag = false;
 		var oldX;
 		var oldY;
@@ -221,8 +222,19 @@
 
 				//サブウィンドウのイラストを親ウィンドウに送る
 				$("#iconButton").click(function(){
-            var imgData = can.toDataURL();
-
+						var cc = document.createElement("canvas");
+						cc.width  = can.width();
+						cc.height = can.height();
+						for (var i = 0; i < layer.length; i++) {
+								layer[i].width = can.width() + "px";
+								layer[i].height = can.height() + "px";
+								cc.getContext("2d").drawImage(layer[i], 0, 0);
+								layer[i].width = 100 + "px";
+								layer[i].height = Math.floor(100 * can.height() / can.width()) + "px";
+						}
+            var imgData = cc.toDataURL();
+						window.opener.irasutoka(imgData);
+						window.open('about:blank', '_self').close();
         });
 
         // load tmp save data.
@@ -417,6 +429,7 @@ function scrollY(){return document.documentElement.scrollTop || document.body.sc
 	<div style="width:100%;">
         <h1 id="title" style="display:inline;">Canvasお絵描きアプリ</h1>
     </div>
+	<img id= "mainimg">
 
 	<div id="canvasArea" style="float:left;">
 		<canvas id="myCanvas" height="600px" width="400px"></canvas>
