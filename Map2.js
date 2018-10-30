@@ -44,6 +44,8 @@ var jsts2googleMaps = function(geometry) {
   return GMcoords;
 }
 
+var frameimg = new Image;
+
 function initialize() {
   //getPosition();
   navigator.geolocation.getCurrentPosition(
@@ -429,19 +431,20 @@ function readImg(reader){
 }
 //キャンバスにImageを表示
 function drawImgOnCav(canvas, img, x, y, w, h) {
-  var img2 = new Image();
-  img2.src = "star5.png";
+  var obj = document.getElementById("kimoti");
+  var kimoti = obj.value;
+  frame(kimoti);
   var ctx = canvas.getContext("2d");
   var options = {width: 250, height: 250};
   SmartCrop.crop(img, options, function(result) {
 
   // 自動抽出されたトリミング情報を取得
   var crop = result.topCrop;
-  canvas.width = img2.width;
-  canvas.height = img2.height;
+  canvas.width = frameimg.width;
+  canvas.height = frameimg.height;
 
   //取得した座標を使って、画像を書き出し
-  ctx.drawImage(img2, 0, 0, canvas.width, canvas.height);
+  ctx.drawImage(frameimg, 0, 0, canvas.width, canvas.height);
   ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
   image = canvas.toDataURL();
   var marker = new google.maps.Marker({
@@ -462,7 +465,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
       else {
         var irasuto_result = window.confirm("イラストを描きますか？");
         if (irasuto_result){
-          var subWin = window.open("freeHandWrite2.html?=image" +image,"sub","width=1000,height=2000");
+          var subWin = window.open("freeHandWrite2.html","sub");
           iconPosition = marker.getPosition();
           marker.setMap(null);
         }
@@ -516,15 +519,16 @@ function printWidthHeight( width_height_id, flag, w, h) {
 function irasutoka(imgData) {
   var canvas2 = document.createElement('canvas');
   var irasutoimg = new Image();
-  irasutoimg.src = imgData
-  var img3 = new Image();
-  img3.src = "star5.png";
+  irasutoimg.src = imgData;
+  var obj = document.getElementById("kimoti");
+  var kimoti = obj.value;
+  frame(kimoti);
   var ctx = canvas2.getContext("2d");
   var options = {width: 250, height: 250};
   canvas2.width = img3.width;
   canvas2.height = img3.height;
   //取得した座標を使って、画像を書き出し
-  ctx.drawImage(img3, 0, 0, canvas2.width, canvas2.height);
+  ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
   ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
   image = canvas2.toDataURL();
   var marker = new google.maps.Marker({
@@ -593,4 +597,26 @@ function irasutoka(imgData) {
   iconNo += 1;
   icon.setMap(map);//アイコン表示
 });*/
+}
+function frame (kimoti){
+  switch (kimoti) {
+    case "bikkuri":
+      frameimg.src = "star5.png";
+      break;
+
+    case "heart":
+      frameimg.src = "heart.png";
+      break;
+
+    case "jaaku":
+      frameimg.src = "kowai.png";
+      break;
+
+    case "hatena":
+      frameimg.src = "hatena.png";
+      break;
+    case "hikari":
+      frameimg.src = "hikari.png";
+      break;
+  }
 }
