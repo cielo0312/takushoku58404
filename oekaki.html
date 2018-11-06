@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>お絵かき</title>
+    <meta name="viewport" content="width=500px initial-scale=0.64" />
+    <meta charset="utf-8">
+		<style>
+      body {
+        background: #666;
+      }
+      canvas {
+        background: #fff;
+      }
+      button {
+          width: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <canvas id="canvas" width="400" height="400"></canvas>
+    </div>
+    <div>
+      <button onclick="changeColor('red')">red</button>
+      <button onclick="changeColor('blue')">blue</button>
+      <button onclick="changeColor('green')">green</button>
+      <button onclick="changeColor('yellow')">yellow</button>
+      <button onclick="changeColor('black')">black</button>
+    </div>
+    <script>
+		
+		const canvas = document.querySelector('canvas');
+		const context = canvas.getContext('2d');
+
+		document.addEventListener('mousedown', (event) => {
+    	context.beginPath();
+    	context.moveTo(event.clientX, event.clientY);
+    	document.addEventListener('mousemove', stroke);
+		});
+
+		function stroke(event) {
+    	context.lineTo(event.clientX, event.clientY);
+    	context.stroke();
+		}
+
+		document.addEventListener('mouseup', (event) => {
+    	document.removeEventListener('mousemove', stroke);
+		});
+
+		function changeColor(color) {
+    	context.strokeStyle = color;
+		}
+
+		</script>
+  </body>
+</html>

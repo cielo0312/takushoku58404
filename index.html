@@ -10,6 +10,22 @@
       #map {
         height: 100%;
       }
+
+      #overlay {
+          position: fixed;
+          display: none;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0,0,0,0.5);
+          z-index: 2;
+          cursor: pointer;
+          overflow-y: auto;
+      }
+
       /* Optional: Makes the sample page fill the window. */
       html, body {
         height: 100%;
@@ -20,6 +36,16 @@
     </style>
   </head>
   <body>
+    <div id="overlay" onclick="off()">
+      <a href="#"id="WC" onclick="imgClick(this);"><img src="WC.png" width="200" height="200"></a>
+      <a href="#" id="jihannki" onclick="imgClick(this);"><img src="jihannki.png" width="200" height="200"></a>
+      <a href="#" id="shokuji" onclick="imgClick(this);"><img src="shokuji.png" width="200" height="200"></a>
+      <a href="#" id="bus" onclick="imgClick(this);"><img src="bus.png" width="200" height="200"></a>
+    </div>
+
+    <button onclick="hozon()">地図の保存</button>
+    <button onclick="load()">地図の読み込み</button>
+    <button onclick="dataClear()">地図を消す</button>
     <p>
       <input type="button" style="width:90%; font-size:50px;" value="冒険地図作成" onclick="initialize()">
       <form id="target">
@@ -45,6 +71,6 @@
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB7f-0pGCHFUKHf4JLZnQaF2l5_uuFNWE&libraries=geometry">
     </script>
     <script src="jsts.min.js"></script>
-    <script src=smartcrop.js></script>
+    <script src="smartcrop.js"></script>
     </body>
 </html>

@@ -16,6 +16,7 @@ var angle = 3.6;//100角形の内角
 var image;
 var gmap;
 var newlatlng;
+var lat_lng2;
 var iconPosition;
 var flag = 0;
 var kageLayer = [ // 影の緯度経度
@@ -58,8 +59,8 @@ function initialize() {
       console.log("最初の経度:"+ keido);
       console.log("最初の精度:"+ gosa);
 
-      if(gosa <= 30){
-  　     //精度が５０m以下の時にポリゴンを表示
+      if(gosa <= 2000){
+  　     //精度が６０m以下の時にポリゴンを表示
         newlatlng = new google.maps.LatLng(ido,keido);
         map = new google.maps.Map(document.getElementById('map'), {
           zoom: 19,
@@ -131,7 +132,7 @@ function initialize() {
         var lng = pos.lng(); //経度
         gmap = map;
         // 穴の緯度経度
-        for (var i = 1; i < 101; i++) {//65538
+        for (var i = 1; i < 101; i++) {
           holeLayer1.push(
             {lat: lat + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: lng + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
           );
@@ -151,6 +152,7 @@ function initialize() {
         JSTSpoly[0] = JSTSpoly1
         holePoly[0] = jsts2googleMaps(JSTSpoly[0]);//holeLayer1を和集合ポリゴンに代入
         points = [kageLayer, holePoly[0]];//pathを結合する
+        console.log(bounds);
         x = new google.maps.Polygon({
           paths: points,
           strokeColor: '#FFFFFF',
@@ -198,9 +200,11 @@ function getClickLatLng(lat_lng, map) {
   var element = document.getElementById( "target" ) ;
   var radioNodeList = element.hoge ;
   var a = radioNodeList.value ;
-  /*
-  if(a == "アイコン"){
 
+  if(a == "アイコン"){
+    on();
+    lat_lng2 = lat_lng;
+/*
       // マーカーを設置
       var marker = new google.maps.Marker({
         position: lat_lng,
@@ -222,6 +226,7 @@ function getClickLatLng(lat_lng, map) {
       iconNo += 1;
       icon.setMap(map);//アイコン表示
       */
+    }
   if(a == "コメント"){
     //コメント
     var comment = window.prompt("何かひとこと", "");
@@ -229,7 +234,7 @@ function getClickLatLng(lat_lng, map) {
     var iw = new google.maps.InfoWindow({
       position: lat_lng,
       content: comment
-  　　 });
+    });
     iw.open(map);//コメントの表示
     }
   }
@@ -247,9 +252,9 @@ var loop = function(){//holeLayer2を時間差で表示する
       console.log("緯度:"+ ido2);
       console.log("経度:"+ keido2);
       console.log("精度:"+ gosa2);
-      if (gosa2 <= 30){
+      if (gosa2 <= 2000){
         newlatlng = new google.maps.LatLng(ido2,keido2);
-      //精度が５０m以下のときポリゴンを追加
+      //精度が６０m以下のときポリゴンを追加
         for (var i = 1; i < 101; i++) {
           holeLayer2.push(
             {lat: ido2 + lat25 * Math.sin( angle * i * (Math.PI / 180) ) ,lng: keido2 + lng25 * Math.cos( angle * i * (Math.PI / 180) )}
@@ -311,7 +316,7 @@ var loop = function(){//holeLayer2を時間差で表示する
         });
         //マップ上にポリゴンを表示
         x.setMap(map);
-        console.log(points);
+        console.log(JSTSpoly);
         setTimeout(loop,5000);
       }else {
         loop();
@@ -403,6 +408,7 @@ function selectReadfile(e) {
     readDrawImg(reader, canvas, 0, 0);
   }
 }
+
 function readDrawImg(reader, canvas, x, y){
   var img = readImg(reader);
   img.onload = function(){
@@ -421,6 +427,7 @@ function readDrawImg(reader, canvas, x, y){
     }
   }
 }
+
 //ファイルの読込が終了した時の処理
 function readImg(reader){
   //ファイル読み取り後の処理
@@ -431,55 +438,59 @@ function readImg(reader){
 }
 //キャンバスにImageを表示
 function drawImgOnCav(canvas, img, x, y, w, h) {
-  var obj = document.getElementById("kimoti");
-  var kimoti = obj.value;
-  frame(kimoti);
-  var ctx = canvas.getContext("2d");
-  var options = {width: 250, height: 250};
-  SmartCrop.crop(img, options, function(result) {
+    var obj = document.getElementById("kimoti");
+    var kimoti = obj.value;
+    frame(kimoti);
+    var ctx = canvas.getContext("2d");
+    var options = {width: 250, height: 250};
+    SmartCrop.crop(img, options, function(result) {
 
-  // 自動抽出されたトリミング情報を取得
-  var crop = result.topCrop;
-  canvas.width = frameimg.width;
-  canvas.height = frameimg.height;
+      // 自動抽出されたトリミング情報を取得
+      var crop = result.topCrop;
+      canvas.width = frameimg.width;
+      canvas.height = frameimg.height;
+      console.log(frameimg);
+      console.log(img);
+      //取得した座標を使って、画像を書き出し
+      ctx.drawImage(frameimg, 0, 0, canvas.width, canvas.height);
+      ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
+      image = canvas.toDataURL();
 
-  //取得した座標を使って、画像を書き出し
-  ctx.drawImage(frameimg, 0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
-  image = canvas.toDataURL();
-  var marker = new google.maps.Marker({
-    position: newlatlng,
-    map: map,
-    icon: {
-      url: image,
-      scaledSize: new google.maps.Size(200, 200)
-    }
-  });
-    marker.addListener('click', function() { // マーカーをクリックしたとき
-      var element2 = document.getElementById( "target" ) ;
-      var radioNodeList2 = element2.hoge ;
-      var b = radioNodeList2.value ;
-      if (b == "アイコン削除"){
-        marker.setMap(null);//アイコンの削除
-      }
-      else {
-        var irasuto_result = window.confirm("イラストを描きますか？");
-        if (irasuto_result){
-          var subWin = window.open("freeHandWrite2.html","sub");
-          iconPosition = marker.getPosition();
-          marker.setMap(null);
+      var marker = new google.maps.Marker({
+        position: newlatlng,
+        map: map,
+        icon: {
+          url: image,
+          scaledSize: new google.maps.Size(180, 180)
         }
-      }
-    });
-    /*
+      });
+
+      marker.addListener('click', function() { // マーカーをクリックしたとき
+        var element2 = document.getElementById( "target" ) ;
+        var radioNodeList2 = element2.hoge ;
+        var b = radioNodeList2.value ;
+        if (b == "アイコン削除"){
+          marker.setMap(null);//アイコンの削除
+        }
+        else {
+          var irasuto_result = window.confirm("イラストを描きますか？");
+          if (irasuto_result){
+            var subWin = window.open("freeHandWrite2.html","sub");
+            iconPosition = marker.getPosition();
+            marker.setMap(null);
+          }
+        }
+      });
+
+  //icon[iconNo] = marker;
+  //iconNo += 1;
+  //icon.setMap(map);//アイコン表示
+  });
+  /*
   icon[iconNo] = marker;
   iconNo += 1;
   icon.setMap(map);//アイコン表示
   */
-  });
-  icon[iconNo] = marker;
-  iconNo += 1;
-  icon.setMap(map);//アイコン表示
 }
 // リサイズ後のwidth, heightを求める
 function resizeWidthHeight(target_length_px, w0, h0){
@@ -508,14 +519,11 @@ function resizeWidthHeight(target_length_px, w0, h0){
     h: parseInt(h1)
   };
 }
+
 function printWidthHeight( width_height_id, flag, w, h) {
   var wh = document.getElementById(width_height_id);
-  /*if(!flag){
-    wh.innerHTML = "なし";
-    return;
-  }*/
-  //wh.innerHTML = 'width:' + w + ' height:' + h;
 }
+
 function irasutoka(imgData) {
   var canvas2 = document.createElement('canvas');
   var irasutoimg = new Image();
@@ -525,8 +533,8 @@ function irasutoka(imgData) {
   frame(kimoti);
   var ctx = canvas2.getContext("2d");
   var options = {width: 250, height: 250};
-  canvas2.width = img3.width;
-  canvas2.height = img3.height;
+  canvas2.width = frameimg.width;
+  canvas2.height = frameimg.height;
   //取得した座標を使って、画像を書き出し
   ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
   ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
@@ -536,7 +544,7 @@ function irasutoka(imgData) {
     map: map,
     icon: {
       url: image,
-      scaledSize: new google.maps.Size(200, 200)
+      scaledSize: new google.maps.Size(180, 180)
     }
   });
     marker.addListener('click', function() { // マーカーをクリックしたとき
@@ -549,15 +557,15 @@ function irasutoka(imgData) {
       else {
         var irasuto_result = window.confirm("イラストを描きますか？");
         if (irasuto_result){
-          var subWin = window.open("freeHandWrite2.html","sub","width=1000,height=2000");
+          var subWin = window.open("freeHandWrite2.html","sub");
           iconPosition = marker.getPosition();
           marker.setMap(null);
         }
       }
     });
-  icon[iconNo] = marker;
-  iconNo += 1;
-  icon.setMap(map);//アイコン表示
+  //icon[iconNo] = marker;
+  //iconNo += 1;
+  //icon.setMap(map);//アイコン表示
   /*SmartCrop.crop(imgData, options, function(result) {
 
   // 自動抽出されたトリミング情報を取得
@@ -615,8 +623,243 @@ function frame (kimoti){
     case "hatena":
       frameimg.src = "hatena.png";
       break;
+
     case "hikari":
       frameimg.src = "hikari.png";
       break;
   }
+}
+
+function on() {
+    document.getElementById("overlay").style.display = "block";
+}
+
+function off() {
+    document.getElementById("overlay").style.display = "none";
+}
+
+function imgClick(select_icon){
+  var selectID = select_icon.id;
+  console.log(selectID);
+  var dficon = new Image;
+  switch (selectID) {
+    case "WC":
+      console.log("yes");
+      var marker = new google.maps.Marker({
+        position: lat_lng2,
+        map: map,
+        icon: {
+          url: "WC.png",
+          scaledSize: new google.maps.Size(70, 70)
+        }
+      });
+        marker.addListener('click', function() { // マーカーをクリックしたとき
+          var element2 = document.getElementById( "target" ) ;
+          var radioNodeList2 = element2.hoge ;
+          var b = radioNodeList2.value ;
+          if (b == "アイコン削除"){
+            marker.setMap(null);//アイコンの削除
+          }
+        });
+      break;
+
+      case "jihannki":
+        var marker = new google.maps.Marker({
+          position: lat_lng2,
+          map: map,
+          icon: {
+            url: "jihannki.png",
+            scaledSize: new google.maps.Size(70, 70)
+          }
+        });
+          marker.addListener('click', function() { // マーカーをクリックしたとき
+            var element2 = document.getElementById( "target" ) ;
+            var radioNodeList2 = element2.hoge ;
+            var b = radioNodeList2.value ;
+            if (b == "アイコン削除"){
+              marker.setMap(null);//アイコンの削除
+            }
+          });
+        break;
+
+        case "shokuji":
+          var marker = new google.maps.Marker({
+            position: lat_lng2,
+            map: map,
+            icon: {
+              url: "shokuji.png",
+              scaledSize: new google.maps.Size(70, 70)
+            }
+          });
+            marker.addListener('click', function() { // マーカーをクリックしたとき
+              var element2 = document.getElementById( "target" ) ;
+              var radioNodeList2 = element2.hoge ;
+              var b = radioNodeList2.value ;
+              if (b == "アイコン削除"){
+                marker.setMap(null);//アイコンの削除
+              }
+            });
+          break;
+
+        case "bus":
+          var marker = new google.maps.Marker({
+              position: lat_lng2,
+              map: map,
+              icon: {
+                url: "bus.png",
+                scaledSize: new google.maps.Size(70, 70)
+              }
+            });
+              marker.addListener('click', function() { // マーカーをクリックしたとき
+                var element2 = document.getElementById( "target" ) ;
+                var radioNodeList2 = element2.hoge ;
+                var b = radioNodeList2.value ;
+                if (b == "アイコン削除"){
+                  marker.setMap(null);//アイコンの削除
+                }
+              });
+            break;
+  }
+}
+
+function hozon(){
+  console.log(points);
+  console.log(bounds);
+  localStorage.setItem('points', JSON.stringify(points));
+  localStorage.setItem('bounds', JSON.stringify(bounds));
+}
+
+function load(){
+  points = JSON.parse(localStorage.getItem('points'));
+  bounds = JSON.parse(localStorage.getItem('bounds'));
+  console.log(points);
+  console.log(bounds);
+  //getPosition();
+  navigator.geolocation.getCurrentPosition(
+    // 取得成功した場合
+    function(position) {
+      var ido = position.coords.latitude; //取得した緯度
+      var keido = position.coords.longitude; //取得した経度
+      var gosa = position.coords.accuracy; //取得した精度
+      console.log("最初の緯度:"+ ido);
+      console.log("最初の経度:"+ keido);
+      console.log("最初の精度:"+ gosa);
+
+      if(gosa <= 2000){
+  　     //精度が６０m以下の時にポリゴンを表示
+        newlatlng = new google.maps.LatLng(ido,keido);
+        map = new google.maps.Map(document.getElementById('map'), {
+          zoom: 19,
+          center: new google.maps.LatLng(ido,keido),
+          minZoom : 8.5,//３０km
+          styles: [{
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          },
+          {
+            "featureType": "water",
+            "stylers": [
+              {
+                "visibility": "on"
+              },{
+                "color": "#9CA7E2"
+              }
+            ]
+          },
+          {
+            "featureType": "landscape",
+            "stylers": [
+              {
+                "visibility": "on"
+              },{
+                "color": "#00FF41"
+              }
+            ]
+          },
+          {
+            "featureType": "administrative",
+            "elementType": "geometry.stroke",
+            "stylers": [
+              {
+                "visibility": "on"
+              },{
+                "color": "#2f343b"
+              },{
+                "weight": 1
+              }
+            ]
+          },
+          {
+            "featureType": "road",
+            "stylers": [
+              {
+                "visibility": "on"
+              },{
+                "color": "#DDDED3"
+              }
+            ]
+          },
+          {
+            "elementType": "labels",
+            "stylers": [
+              {
+                "visibility": "off"
+              }
+            ]
+          }
+        ]
+        });
+
+        var pos = map.getCenter(); //中心座標の取得
+        var lat = pos.lat(); //緯度
+        var lng = pos.lng(); //経度
+        gmap = map;
+        x = new google.maps.Polygon({
+          paths: points,
+          strokeColor: '#FFFFFF',
+          strokeOpacity: 1.0,
+          strokeWeight: 2,
+          fillColor: '#FFFFFF',
+          fillOpacity: 1.0
+        });
+
+      x.setMap(map);//mapにポリゴンを表示
+
+      map.addListener('click', function(e) {//クリックした時の処理
+        getClickLatLng(e.latLng, map);
+      });
+
+        setTimeout(loop,5000);//５秒後に実行
+      }else{
+        initialize();
+      }
+    },
+    // 取得失敗した場合
+    function(error) {
+      switch(error.code) {
+        case 1: //PERMISSION_DENIED
+          alert("位置情報の利用が許可されていません");
+          break;
+        case 2: //POSITION_UNAVAILABLE
+          alert("現在位置が取得できませんでした");
+          break;
+        case 3: //TIMEOUT
+          alert("タイムアウトになりました");
+          break;
+        default:
+          alert("その他のエラー(エラーコード:"+error.code+")");
+          break;
+      }
+    },
+    {
+      enableHighAccuracy: true,
+    }
+  );
+}
+
+function dataClear(){
+  localStorage.clear();
 }
