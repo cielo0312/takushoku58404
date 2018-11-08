@@ -13,8 +13,9 @@ var icon = [];
 var lat25 = 0.00022457872; //緯度２５m
 var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
-var image;
 var gmap;
+var test;
+var test2;
 var newlatlng;
 var lat_lng2;
 var iconPosition;
@@ -202,7 +203,7 @@ function getClickLatLng(lat_lng, map) {
   var a = radioNodeList.value ;
 
   if(a == "アイコン"){
-    on();
+    setTimeout("on()",1000);
     lat_lng2 = lat_lng;
 /*
       // マーカーを設置
@@ -371,6 +372,7 @@ function checkFileApi() {
   alert('The File APIs are not fully  in this browser.');
   return false;
 }
+
 //端末がモバイルか
 var _ua = (function(u){
   var mobile = {
@@ -449,18 +451,18 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
       var crop = result.topCrop;
       canvas.width = frameimg.width;
       canvas.height = frameimg.height;
-      console.log(frameimg);
-      console.log(img);
       //取得した座標を使って、画像を書き出し
       ctx.drawImage(frameimg, 0, 0, canvas.width, canvas.height);
       ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
-      image = canvas.toDataURL();
-
+      var markerimg = canvas.toDataURL();
+      console.log(markerimg);
+      test = markerimg;
+      test2 = newlatlng;
       var marker = new google.maps.Marker({
         position: newlatlng,
         map: map,
         icon: {
-          url: image,
+          url: markerimg,
           scaledSize: new google.maps.Size(180, 180)
         }
       });
@@ -470,6 +472,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
         var radioNodeList2 = element2.hoge ;
         var b = radioNodeList2.value ;
         if (b == "アイコン削除"){
+          icon[iconNo] = void 0;//void 0 によりundefinedを代入
           marker.setMap(null);//アイコンの削除
         }
         else {
@@ -477,14 +480,15 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
           if (irasuto_result){
             var subWin = window.open("freeHandWrite2.html","sub");
             iconPosition = marker.getPosition();
+            icon[iconNo] = void 0;//void 0 によりundefinedを代入
             marker.setMap(null);
           }
         }
       });
 
-  //icon[iconNo] = marker;
-  //iconNo += 1;
-  //icon.setMap(map);//アイコン表示
+
+  icon[iconNo] = marker;
+  iconNo += 1;
   });
   /*
   icon[iconNo] = marker;
@@ -552,6 +556,7 @@ function irasutoka(imgData) {
       var radioNodeList2 = element2.hoge ;
       var b = radioNodeList2.value ;
       if (b == "アイコン削除"){
+        icon[iconNo] = void 0;//void 0 によりundefinedを代入
         marker.setMap(null);//アイコンの削除
       }
       else {
@@ -559,12 +564,13 @@ function irasutoka(imgData) {
         if (irasuto_result){
           var subWin = window.open("freeHandWrite2.html","sub");
           iconPosition = marker.getPosition();
+          icon[iconNo] = void 0;//void 0 によりundefinedを代入
           marker.setMap(null);
         }
       }
     });
-  //icon[iconNo] = marker;
-  //iconNo += 1;
+  icon[iconNo] = marker;
+  iconNo += 1;
   //icon.setMap(map);//アイコン表示
   /*SmartCrop.crop(imgData, options, function(result) {
 
@@ -858,6 +864,48 @@ function load(){
       enableHighAccuracy: true,
     }
   );
+}
+
+function iconhozon(){
+  localStorage.setItem('icon', test);
+  console.log(test2);
+  localStorage.setItem('latLng', JSON.stringify(test2));
+}
+
+function iconload(){
+  test = localStorage.getItem('icon');
+  test2 = JSON.parse(localStorage.getItem('latLng'));
+
+  var marker = new google.maps.Marker({
+    position: test2,
+    map: map,
+    icon: {
+      url: test,
+      scaledSize: new google.maps.Size(180, 180)
+    }
+  });
+  console.log(marker);
+
+  marker.addListener('click', function() { // マーカーをクリックしたとき
+    var element2 = document.getElementById( "target" ) ;
+    var radioNodeList2 = element2.hoge ;
+    var b = radioNodeList2.value ;
+    if (b == "アイコン削除"){
+      icon[iconNo] = void 0;//void 0 によりundefinedを代入
+      marker.setMap(null);//アイコンの削除
+    }
+    else {
+      var irasuto_result = window.confirm("イラストを描きますか？");
+      if (irasuto_result){
+        var subWin = window.open("freeHandWrite2.html","sub");
+        iconPosition = marker.getPosition();
+        icon[iconNo] = void 0;//void 0 によりundefinedを代入
+        marker.setMap(null);
+      }
+    }
+  });
+icon[iconNo] = marker;
+iconNo += 1;
 }
 
 function dataClear(){
