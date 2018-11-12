@@ -300,7 +300,7 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             //マップ上にポリゴンを表示
             x.setMap(map);
             console.log(JSTSpoly);
-            setTimeout(loop,5000);
+            setTimeout(loop1,5000);
             }else {
                 loop1();
             }
