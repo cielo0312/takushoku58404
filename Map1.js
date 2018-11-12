@@ -151,7 +151,7 @@ function initialize1() {
                         getClickLatLng(e.latLng, map);
                     });
 
-                    setTimeout(loop,5000);//５秒後に実行
+                    setTimeout(loop1,5000);//５秒後に実行
             }else{
                 initialize();
             }
@@ -223,7 +223,7 @@ function getClickLatLng(lat_lng, map) {
     }
 }
 
-var loop = function(){//holeLayer2を時間差で表示する
+var loop1 = function(){//holeLayer2を時間差で表示する
     var holeLayer2 = [];//holeLayer2初期化
     var e = 0;
     navigator.geolocation.getCurrentPosition(
@@ -302,7 +302,7 @@ var loop = function(){//holeLayer2を時間差で表示する
             console.log(JSTSpoly);
             setTimeout(loop,5000);
             }else {
-                loop();
+                loop1();
             }
         },
         // 取得失敗した場合

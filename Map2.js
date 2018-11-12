@@ -1,52 +1,13 @@
 //Map.js
-var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
-var holePoly = []; //穴の配列
-var points; //地図に表示するポリゴンの配列
-var bounds = []; //境界線の配列
-var polypath =[];
-var JSTSpoly = []; //取得したポリゴンの配列
-var x; //ポリゴンのオプション
-var c = 1;
 var iconNo = 0;
 var i = 0;
 var icon = [];
-var lat25 = 0.00022457872; //緯度２５m
-var lng25 = 0.00027415956; //経度２５m
-var angle = 3.6;//100角形の内角
-var c = 0;
-var test;
 var test2;
 var newlatlng;
 var lat_lng2;
 var iconPosition;
 var flag = 0;
-var kageLayer = [ // 影の緯度経度
-    //時計回り
-    {lat: 46.33, lng: 148.4508},
-    {lat: 24.26, lng: 148.4508},
-    {lat: 24.26, lng: 125.5911},
-    {lat: 46.33, lng: 125.5911},
-    {lat: 46.33, lng: 148.4508},
-];
-var googleMaps2JSTS = function(boundaries) {
-    var coordinates = [];
-    for (var i = 0; i < boundaries.getLength(); i++) {
-        coordinates.push(new jsts.geom.Coordinate(
-            boundaries.getAt(i).lat(), boundaries.getAt(i).lng()));
-        }
-    return coordinates;
-};
-
-var jsts2googleMaps = function(geometry) {
-    var coordArray = geometry.getCoordinates();
-    GMcoords = [];
-    for (var i = 0; i < coordArray.length; i++) {
-        GMcoords.push(new google.maps.LatLng(coordArray[i].x, coordArray[i].y));
-    }
-    return GMcoords;
-}
-
 var frameimg = new Image;
 
 function initialize2() {
@@ -115,18 +76,14 @@ function initialize2() {
                 var lat = pos.lat(); //緯度
                 var lng = pos.lng(); //経度
                 polypath.push(new google.maps.LatLng(lat, lng));
-
-                var polyline = new google.maps.Polyline( {
+                var polyline = new google.maps.Polyline({
 	                   map: map,
 	                   path: polypath,
                 });
-
-
                 map.addListener('click', function(e) {//クリックした時の処理
                     getClickLatLng(e.latLng, map);
                 });
-
-                    setTimeout(loop(polyline),1000);//５秒後に実行
+                    setTimeout(loop2(polyline),1000);//５秒後に実行
             }else{
                 initialize();
             }
@@ -158,7 +115,6 @@ function getClickLatLng(lat_lng, map) {
     var element = document.getElementById( "target" ) ;
     var radioNodeList = element.hoge ;
     var a = radioNodeList.value ;
-
     if(a == "アイコン"){
         setTimeout("on()",1000);
         lat_lng2 = lat_lng;
@@ -198,7 +154,7 @@ function getClickLatLng(lat_lng, map) {
     }
 }
 
-function loop(polyline){//holeLayer2を時間差で表示する
+function loop2(polyline){//holeLayer2を時間差で表示する
     navigator.geolocation.getCurrentPosition(
         // 取得成功した場合
         function(position){
@@ -214,7 +170,7 @@ function loop(polyline){//holeLayer2を時間差で表示する
                 polyline.setPath(polypath);
             setTimeout(loop(polyline),3000);
             } else {
-                loop(polyline);
+                loop2(polyline);
             }
         },
         // 取得失敗した場合
