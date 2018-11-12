@@ -5,6 +5,7 @@ var i = 0;
 var icon = [];
 var test2;
 var newlatlng;
+var polypath = [];
 var lat_lng2;
 var iconPosition;
 var flag = 0;
@@ -85,7 +86,7 @@ function initialize2() {
                 });
                     setTimeout(loop2(polyline),1000);//５秒後に実行
             }else{
-                initialize();
+                initialize2();
             }
         },
         // 取得失敗した場合
