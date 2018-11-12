@@ -187,29 +187,8 @@ function getClickLatLng(lat_lng, map) {
     if(a == "アイコン"){
         setTimeout("on()",1000);
         lat_lng2 = lat_lng;
-/*
-      // マーカーを設置
-      var marker = new google.maps.Marker({
-        position: lat_lng,
-        map: map,
-        icon: {
-          url: image,
-          scaledSize: new google.maps.Size(100, 100)
-        }
-      });
-        marker.addListener('click', function() { // マーカーをクリックしたとき
-          var element2 = document.getElementById( "target" ) ;
-          var radioNodeList2 = element.hoge ;
-          var b = radioNodeList.value ;
-          if (b == "アイコン削除"){
-            marker.setMap(null);//アイコンの削除
-          }
-        });
-      icon[iconNo] = marker;
-      iconNo += 1;
-      icon.setMap(map);//アイコン表示
-*/
     }
+    
     if(a == "コメント"){
         //コメント
         var comment = window.prompt("何かひとこと", "");
