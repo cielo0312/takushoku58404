@@ -84,7 +84,7 @@ function initialize2() {
                 map.addListener('click', function(e) {//クリックした時の処理
                     getClickLatLng(e.latLng, map);
                 });
-                    setTimeout(loop2(polyline),1000);//５秒後に実行
+                    setTimeout(loop2(polyline),1000);//1秒後に実行
             }else{
                 initialize2();
             }
@@ -169,7 +169,7 @@ function loop2(polyline){//holeLayer2を時間差で表示する
                 //精度が６０m以下のときポリゴンを追加
                 polypath.push(new google.maps.LatLng(ido2, keido2));
                 polyline.setPath(polypath);
-            setTimeout(loop(polyline),3000);
+            setTimeout(loop2(polyline),3000);
             } else {
                 loop2(polyline);
             }
