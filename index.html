@@ -25,6 +25,54 @@
           cursor: pointer;
           overflow-y: auto;
       }
+      #color {
+        list-style: none;
+        overflow: hidden;
+      }
+
+      #color li1 {
+        width: 140px;
+        text-align: center;
+        background-color: #f00;
+        float: left;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 2px;
+      }
+      #color li2 {
+        width: 140px;
+        text-align: center;
+        background-color: #00f;
+        float: left;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 2px;
+      }
+      #color li3 {
+        width: 140px;
+        text-align: center;
+        background-color: #0f0;
+        float: left;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 2px;
+      }
+      #color li4 {
+        width: 140px;
+        text-align: center;
+        background-color: #000;
+        float: left;
+        height: 50px;
+        line-height: 50px;
+        margin-right: 2px;
+      }
+
+      #color li a {
+        text-decoration: none;
+        color: #fff;
+        font-weight: bold;
+        padding: 20px;
+      }
 
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -42,12 +90,20 @@
       <a href="#" id="shokuji" onclick="imgClick(this);"><img src="shokuji.png" width="200" height="200"></a>
       <a href="#" id="bus" onclick="imgClick(this);"><img src="bus.png" width="200" height="200"></a>
     </div>
+    <!--
     <button onclick="iconhozon()">アイコン保存</button>
     <button onclick="iconload()">アイコン読み込み</button>
     <button onclick="hozon()">地図の保存</button>
     <button onclick="load()">地図の読み込み</button>
     <button onclick="dataClear()">地図を消す</button>
-    <p>
+  -->
+    <ul id="color">
+      <li1><a href="#" id="red" onclick="colorChange(this)">MENU1</a></li1>
+      <li2><a href="#" id="blue" onclick="colorChange(this)">MENU2</a></li2>
+      <li3><a href="#" id="green" onclick="colorChange(this)">MENU3</a></li3>
+      <li4><a href="#" id="black" onclick="colorChange(this)">MENU4</a></li4>
+    </ul>
+    <p1>
       <input type="button" style="width:40%; font-size:50px;" value="範囲限定地図" onclick="initialize1()">
       <input type="button" style="width:40%; font-size:50px;" value="オープン地図" onclick="initialize2()">
       <form id="target">
@@ -55,9 +111,9 @@
         <input name="hoge" type="radio" value="コメント">コメント
         <input name="hoge" type="radio" value="アイコン削除">アイコン削除
       </form>
-    </p>
+    </p1>
+    <p2 id="iconkinou">
     <form>
-      <p>フレーム選択</p>
       <select id="kimoti">
         <option value="bikkuri" selected>びっくり</option>
         <option value="heart">ハート</option>
@@ -66,7 +122,8 @@
         <option value="hikari">光</option>
       </select>
     </form>
-    <p><input type="file" accept="image/*" capture="camera" id="file-image"></p>
+    <input type="file" accept="image/*" capture="camera" id="file-image">
+  </p2>
     <div id="map"></div>
     <script type = "text/javascript" src="Map1.js"></script>
     <script type = "text/javascript" src="Map2.js"></script>

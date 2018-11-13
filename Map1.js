@@ -188,7 +188,7 @@ function getClickLatLng(lat_lng, map) {
         setTimeout("on()",1000);
         lat_lng2 = lat_lng;
     }
-    
+
     if(a == "コメント"){
         //コメント
         var comment = window.prompt("何かひとこと", "");
