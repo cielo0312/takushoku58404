@@ -140,7 +140,7 @@ function initialize2() {
                     x = new google.maps.Polygon({
                         paths: points,
                         strokeColor: '#00ff00',
-                        strokeOpacity: 0.5,
+                        strokeOpacity: 0.0,
                         strokeWeight: 2,
                         fillColor: '#00ff00',
                         fillOpacity: 0.5
@@ -295,7 +295,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         x = new google.maps.Polygon({
                             paths: points,
                             strokeColor: '#00ff00',
-                            strokeOpacity: 0.5,
+                            strokeOpacity: 0.0,
                             strokeWeight: 2,
                             fillColor: '#00ff00',
                             fillOpacity: 0.5
