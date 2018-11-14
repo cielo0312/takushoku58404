@@ -18,8 +18,10 @@ var bounds = [];
 var points =[];
 var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
-var lat25 = 0.00022457872; //緯度２５m
-var lng25 = 0.00027415956; //経度２５m
+//var lat25 = 0.00022457872; //緯度２５m
+//var lng25 = 0.00027415956; //経度２５m
+var lat25 = 0.00022457872/3; //緯度２５m
+var lng25 = 0.00027415956/3; //経度２５m
 var angle = 3.6;//100角形の内角
 var googleMaps2JSTS = function(boundaries) {
     var coordinates = [];
@@ -55,7 +57,7 @@ function initialize2() {
   　             //精度が2000以下の時にポリゴンを表示
                 newlatlng = new google.maps.LatLng(ido,keido);
                 map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 19,
+                    zoom: 18,
                     center: new google.maps.LatLng(ido,keido),
                     minZoom : 8.5,//３０km
                     mapTypeControl: false,/*マップタイプ・コントローラの制御*/
@@ -452,7 +454,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
             map: map,
             icon: {
                 url: markerimg,
-                scaledSize: new google.maps.Size(180, 180)
+                scaledSize: new google.maps.Size(100, 100)
             }
         });
 
@@ -629,8 +631,16 @@ function on() {
     document.getElementById("overlay").style.display = "block";
 }
 
+function on2() {
+    document.getElementById("overlay2").style.display = "block";
+}
+
 function off() {
     document.getElementById("overlay").style.display = "none";
+}
+
+function off2() {
+    document.getElementById("overlay2").style.display = "none";
 }
 
 function imgClick(select_icon){
@@ -935,4 +945,8 @@ function colorChange(color){
                   }]
     };
     map.setOptions(mapOPT);
+}
+
+function option(){
+    setTimeout(on2(), 1000);
 }

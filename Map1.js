@@ -151,7 +151,7 @@ function initialize1() {
                         getClickLatLng(e.latLng, map);
                     });
 
-                    setTimeout(loop1,5000);//５秒後に実行
+                    setTimeout(loop1,3000);//５秒後に実行
             }else{
                 initialize();
             }
@@ -279,7 +279,7 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             //マップ上にポリゴンを表示
             x.setMap(map);
             console.log(JSTSpoly);
-            setTimeout(loop1,5000);
+            setTimeout(loop1,3000);
             }else {
                 loop1();
             }
