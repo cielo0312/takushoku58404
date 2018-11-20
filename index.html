@@ -100,6 +100,14 @@
       }
 
     </style>
+    <script type = "text/javascript" src="Map1.js"></script>
+    <script type = "text/javascript" src="Map2.js"></script>
+    <script async defer
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB7f-0pGCHFUKHf4JLZnQaF2l5_uuFNWE&libraries=geometry">
+    </script>
+    <script src="jsts.min.js"></script>
+    <script src="smartcrop.js"></script>
+    <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
   </head>
   <body>
     <div id="overlay" onclick="off()">
@@ -108,13 +116,11 @@
       <a href="#" id="shokuji" onclick="imgClick(this);"><img src="shokuji.png" width="200" height="200"></a>
       <a href="#" id="bus" onclick="imgClick(this);"><img src="bus.png" width="200" height="200"></a>
     </div>
-    <!--
     <button onclick="iconhozon()">アイコン保存</button>
     <button onclick="iconload()">アイコン読み込み</button>
     <button onclick="hozon()">地図の保存</button>
     <button onclick="load()">地図の読み込み</button>
     <button onclick="dataClear()">地図を消す</button>
-  -->
     <li><a href="#" id="option" onclick="option()">オプション</a></li>
 
     <div id="overlay2" onclick="off2()">
@@ -126,8 +132,8 @@
       </ul>
     </div>
     <p1>
-      <input type="button" style="width:40%; font-size:50px;" value="範囲限定地図" onclick="initialize1()">
-      <input type="button" style="width:40%; font-size:50px;" value="オープン地図" onclick="initialize2()">
+      <input type="button" style="width:40%; font-size:50px;" value="範囲限定" onclick="initialize1()">
+      <input type="button" style="width:40%; font-size:50px;" value="オープン" onclick="initialize2()">
       <form id="target">
         <input name="hoge" type="radio" value="アイコン">アイコン
         <input name="hoge" type="radio" value="コメント">コメント
@@ -147,12 +153,5 @@
     <input type="file" accept="image/*" capture="camera" id="file-image">
   </p2>
     <div id="map"></div>
-    <script type = "text/javascript" src="Map1.js"></script>
-    <script type = "text/javascript" src="Map2.js"></script>
-    <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCB7f-0pGCHFUKHf4JLZnQaF2l5_uuFNWE&libraries=geometry">
-    </script>
-    <script src="jsts.min.js"></script>
-    <script src="smartcrop.js"></script>
     </body>
 </html>

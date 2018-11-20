@@ -305,7 +305,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         //マップ上にポリゴンを表示
                         x.setMap(map);
 
-            setTimeout(loop2(/*polyline*/),3000);
+            setTimeout(loop2(/*polyline*/),1000);
             } else {
                 loop2(/*polyline*/);
             }
@@ -334,7 +334,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
 }
 
 var canvas = document.createElement('canvas');
-window.onload = function(){
+/*window.onload = function(){
     if ( checkFileApi() && checkCanvas(canvas) ){
         //ファイル選択
         var file_image = document.getElementById('file-image');
@@ -484,9 +484,9 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
   icon[iconNo] = marker;
   iconNo += 1;
   icon.setMap(map);//アイコン表示
-  */
-}
 
+}
+*/
 // リサイズ後のwidth, heightを求める
 function resizeWidthHeight(target_length_px, w0, h0){
     //リサイズの必要がなければ元のwidth, heightを返す
@@ -518,7 +518,7 @@ function resizeWidthHeight(target_length_px, w0, h0){
 function printWidthHeight( width_height_id, flag, w, h) {
     var wh = document.getElementById(width_height_id);
 }
-
+/*
 function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
     var irasutoimg = new Image();
@@ -601,7 +601,7 @@ function irasutoka(imgData) {
   iconNo += 1;
   icon.setMap(map);//アイコン表示
 });*/
-}
+//}
 //フレーム画像の選択
 function frame (kimoti){
     switch (kimoti) {
@@ -726,7 +726,7 @@ function imgClick(select_icon){
             break;
     }
 }
-
+/*
 function hozon(){
     console.log(points);
     console.log(bounds);
@@ -882,7 +882,7 @@ function iconload(){
 function dataClear(){
     localStorage.clear();
 }
-
+*/
 function colorChange(color){
     //var colorID = color.id;
     console.log(color.id);
