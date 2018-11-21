@@ -10,8 +10,8 @@ var c = 1;
 var iconNo = 0;
 var i = 0;
 var icon = [];
-var lat25 = 0.00022457872; //緯度２５m
-var lng25 = 0.00027415956; //経度２５m
+var lat25 = 0.00022457872*2; //緯度２５m
+var lng25 = 0.00027415956*2; //経度２５m
 var angle = 3.6;//100角形の内角
 var gmap;
 var test;
@@ -22,7 +22,11 @@ var iconPosition;
 var iconCounter = 0;
 var iconhokan = [];
 var flag = [];
-var db;
+var db = new Dexie("地図データ");
+db.version(1).stores({
+  mapdata: "id"
+});
+db.open();
 var kageLayer = [ // 影の緯度経度
     //時計回り
     {lat: 46.33, lng: 148.4508},
@@ -281,7 +285,6 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             });
             //マップ上にポリゴンを表示
             x.setMap(map);
-            console.log(JSTSpoly);
             setTimeout(loop1,1000);
             }else {
                 loop1();
@@ -744,29 +747,128 @@ function imgClick(select_icon){
 }
 
 function hozon(){
-
-  //
-  // Declare Database
-  //
-  db = new Dexie("地図データ");
-  db.version(1).stores({
-    mapdata: "++id,points,bounds"
-  });
-
   //
   // Manipulate and Query Database
   //
+  console.log(points);
   var pointsJ = JSON.stringify(points);
   var boundsJ = JSON.stringify(bounds);
-  db.mapdata.put({id: 1, points: pointsJ, bounds: boundsJ, updated_at: new Date()});
+  console.log(pointsJ);
+  db.mapdata.put({points:pointsJ});
 }
 
 function load(){
-  db.mapdata
-    .toArray()
-    .then(function (mapdata) {
-        console.log(JSON.parse(mapdata));
+  /*
+    db.mapdata.each(function(h){
+      console.log(h);
     });
+    */
+    db.mapdata.get(1).then(function (data){
+      points = JSON.parse(data.points);
+      console.log(points);
+      //getPosition();
+      navigator.geolocation.getCurrentPosition(
+          // 取得成功した場合
+          function(position) {
+              var ido = position.coords.latitude; //取得した緯度
+              var keido = position.coords.longitude; //取得した経度
+              var gosa = position.coords.accuracy; //取得した精度
+              console.log("最初の緯度:"+ ido);
+              console.log("最初の経度:"+ keido);
+              console.log("最初の精度:"+ gosa);
+              if(gosa <= 2000){
+    　             //精度が６０m以下の時にポリゴンを表示
+                  newlatlng = new google.maps.LatLng(ido,keido);
+                  map = new google.maps.Map(document.getElementById('map'), {
+                      zoom: 19,
+                      center: new google.maps.LatLng(ido,keido),
+                      minZoom : 8.5,//３０km
+                      styles: [{
+                          "stylers": [{
+                              "visibility": "off"
+                          }]
+                      },{
+                            "featureType": "water",
+                            "stylers": [{
+                                "visibility": "on"
+                            },{
+                                "color": "#9CA7E2"
+                              }]
+                        },{
+                              "featureType": "landscape",
+                              "stylers": [{
+                                  "visibility": "on"
+                              },{
+                                  "color": "#00FF41"
+                                }]
+                          },{
+                              "featureType": "administrative",
+                              "elementType": "geometry.stroke",
+                              "stylers": [{
+                                  "visibility": "on"
+                              },{
+                                  "color": "#2f343b"
+                                },{
+                                    "weight": 1
+                                  }]
+                            },{
+                                  "featureType": "road",
+                                  "stylers": [{
+                                      "visibility": "on"
+                                  },{
+                                      "color": "#DDDED3"
+                                    }]
+                              },{
+                                  "elementType": "labels",
+                                  "stylers": [{
+                                      "visibility": "off"
+                                  }]
+                                }]
+                  });
+                  var pos = map.getCenter(); //中心座標の取得
+                  var lat = pos.lat(); //緯度
+                  var lng = pos.lng(); //経度
+                  gmap = map;
+                  x = new google.maps.Polygon({
+                      paths: points,
+                      strokeColor: '#FFFFFF',
+                      strokeOpacity: 1.0,
+                      strokeWeight: 2,
+                      fillColor: '#FFFFFF',
+                      fillOpacity: 1.0
+                  });
+                  x.setMap(map);//mapにポリゴンを表示
+                  map.addListener('click', function(e) {//クリックした時の処理
+                      getClickLatLng(e.latLng, map);
+                  });
+                  setTimeout(loop1,1000);//1秒後に実行
+              }else{
+                  initialize();
+              }
+          },
+      // 取得失敗した場合
+      function(error) {
+          switch(error.code) {
+              case 1: //PERMISSION_DENIED
+                  alert("位置情報の利用が許可されていません");
+              break;
+              case 2: //POSITION_UNAVAILABLE
+                  alert("現在位置が取得できませんでした");
+              break;
+              case 3: //TIMEOUT
+                  alert("タイムアウトになりました");
+              break;
+              default:
+                  alert("その他のエラー(エラーコード:"+error.code+")");
+              break;
+          }
+      },{
+          enableHighAccuracy: true,
+      });
+    });
+
+
+
 }
 
 function iconhozon(){
