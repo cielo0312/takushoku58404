@@ -10,8 +10,8 @@ var c = 1;
 var iconNo = 0;
 var i = 0;
 var icon = [];
-var lat25 = 0.00022457872*2; //緯度２５m
-var lng25 = 0.00027415956*2; //経度２５m
+var lat25 = 0.00022457872; //緯度２５m
+var lng25 = 0.00027415956; //経度２５m
 var angle = 3.6;//100角形の内角
 var gmap;
 var test;
@@ -24,7 +24,7 @@ var iconhokan = [];
 var flag = [];
 var db = new Dexie("地図データ");
 db.version(1).stores({
-  mapdata: "id"
+  mapdata: "++id"
 });
 db.open();
 var kageLayer = [ // 影の緯度経度
@@ -754,7 +754,7 @@ function hozon(){
   var pointsJ = JSON.stringify(points);
   var boundsJ = JSON.stringify(bounds);
   console.log(pointsJ);
-  db.mapdata.put({points:pointsJ});
+  db.mapdata.put({points: pointsJ});
 }
 
 function load(){
