@@ -12,7 +12,7 @@ var lat_lng2;
 var iconPosition;
 var flag = 0;
 var frameimg = new Image;
-var mapColor = "#ff0000";
+var mapColor = "#00f900";
 var polypath1 = [];
 var bounds = [];
 var points =[];
@@ -141,10 +141,10 @@ function initialize2() {
                     points.push(poly[0]);//pathを結合する
                     x = new google.maps.Polygon({
                         paths: points,
-                        strokeColor: '#00ff00',
+                        strokeColor: '#0000ff',
                         strokeOpacity: 0.0,
                         strokeWeight: 2,
-                        fillColor: '#00ff00',
+                        fillColor: '#0000ff',
                         fillOpacity: 0.5
                     });
 
@@ -296,10 +296,10 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         x.setMap(null);//古いポリゴンを除去
                         x = new google.maps.Polygon({
                             paths: points,
-                            strokeColor: '#00ff00',
+                            strokeColor: '#0000ff',
                             strokeOpacity: 0.0,
                             strokeWeight: 2,
-                            fillColor: '#00ff00',
+                            fillColor: '#0000ff',
                             fillOpacity: 0.5
                         });
                         //マップ上にポリゴンを表示
@@ -642,7 +642,7 @@ function off() {
 function off2() {
     document.getElementById("overlay2").style.display = "none";
 }
-
+/*
 function imgClick(select_icon){
     var selectID = select_icon.id;
     console.log(selectID);
