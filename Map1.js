@@ -439,12 +439,12 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
             map: map,
             icon: {
                 url: markerimg,
-                scaledSize: new google.maps.Size(180, 180)
+                scaledSize: new google.maps.Size(150, 150)
             }
         });
 
         marker.addListener('click', function() { // マーカーをクリックしたとき
-            if (marker.icon.scaledSize.width == 180){
+            if (marker.icon.scaledSize.width == 150){
                 var iconzoom = {
                     //position: newlatlng,
                     //map: map,
@@ -461,7 +461,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
                     //map: map,
                     icon: {
                         url: markerimg,
-                        scaledSize: new google.maps.Size(180, 180)
+                        scaledSize: new google.maps.Size(150, 150)
                     }
                 }
                 marker.setOptions(iconzoom);
@@ -502,7 +502,7 @@ function resize(marker, markerimg){
   var iconzoom = {
       icon: {
           url: markerimg,
-          scaledSize: new google.maps.Size(180, 180)
+          scaledSize: new google.maps.Size(150, 150)
       }
   }
   marker.setOptions(iconzoom);
@@ -543,7 +543,6 @@ function printWidthHeight( width_height_id, flag, w, h) {
 function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
     var irasutoimg = new Image();
-    console.log(imgData);
     irasutoimg.src = imgData;
     var obj = document.getElementById("kimoti");
     var kimoti = obj.value;
@@ -556,6 +555,7 @@ function irasutoka(imgData) {
     ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
     ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
     image = canvas2.toDataURL();
+    test9.src = image;//////////////
     iconArray.push(image);
     latlngArray.push(newlatlng);
     var marker = new google.maps.Marker({
@@ -563,11 +563,11 @@ function irasutoka(imgData) {
         map: map,
         icon: {
             url: image,
-            scaledSize: new google.maps.Size(180, 180)
+            scaledSize: new google.maps.Size(150, 150)
         }
     });
     marker.addListener('click', function() { // マーカーをクリックしたとき
-        if (marker.icon.scaledSize.width == 180){
+        if (marker.icon.scaledSize.width == 150){
             var iconzoom = {
                 //position: newlatlng,
                 //map: map,
@@ -584,7 +584,7 @@ function irasutoka(imgData) {
                 //map: map,
                 icon: {
                     url: image,
-                    scaledSize: new google.maps.Size(180, 180)
+                    scaledSize: new google.maps.Size(150, 150)
                 }
             }
             marker.setOptions(iconzoom);
@@ -926,12 +926,12 @@ function iconload(){
           map: map,
           icon: {
             url: markerimg,
-            scaledSize: new google.maps.Size(180, 180)
+            scaledSize: new google.maps.Size(150, 150)
           }
       });
 
       marker.addListener('click', function() { // マーカーをクリックしたとき
-          if (marker.icon.scaledSize.width == 180){
+          if (marker.icon.scaledSize.width == 150){
               var iconzoom = {
                   //position: newlatlng,
                   //map: map,
@@ -948,7 +948,7 @@ function iconload(){
                   //map: map,
                   icon: {
                       url: markerimg,
-                      scaledSize: new google.maps.Size(180, 180)
+                      scaledSize: new google.maps.Size(150, 150)
                   }
               }
               marker.setOptions(iconzoom);

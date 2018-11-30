@@ -333,7 +333,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
     );
 }
 
-var canvas = document.createElement('canvas');
+//var canvas = document.createElement('canvas');
 /*window.onload = function(){
     if ( checkFileApi() && checkCanvas(canvas) ){
         //ファイル選択
@@ -488,6 +488,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
 }
 */
 // リサイズ後のwidth, heightを求める
+/*
 function resizeWidthHeight(target_length_px, w0, h0){
     //リサイズの必要がなければ元のwidth, heightを返す
     var length = Math.max(w0, h0);
@@ -603,6 +604,7 @@ function irasutoka(imgData) {
 });*/
 //}
 //フレーム画像の選択
+/*
 function frame (kimoti){
     switch (kimoti) {
         case "bikkuri":
@@ -946,7 +948,8 @@ function colorChange(color){
     };
     map.setOptions(mapOPT);
 }
-
+/*
 function option(){
     setTimeout(on2(), 1000);
 }
+*/
