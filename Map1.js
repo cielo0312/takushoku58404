@@ -543,7 +543,7 @@ function printWidthHeight( width_height_id, flag, w, h) {
 function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
     var irasutoimg = new Image();
-    console(imgData);
+    console.log(imgData);
     irasutoimg.src = imgData;
     var obj = document.getElementById("kimoti");
     var kimoti = obj.value;
