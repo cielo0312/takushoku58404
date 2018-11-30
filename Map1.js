@@ -543,6 +543,7 @@ function printWidthHeight( width_height_id, flag, w, h) {
 function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
     var irasutoimg = new Image();
+    console(imgData);
     irasutoimg.src = imgData;
     var obj = document.getElementById("kimoti");
     var kimoti = obj.value;
@@ -601,7 +602,7 @@ function irasutoka(imgData) {
         } else {
             var irasuto_result = window.confirm("イラストを描きますか？");
             if (irasuto_result){
-                var subWin = window.open("freeHandWrite2.html","sub");
+                var subWin = window.open("oekaki.html","sub");
                 iconPosition = marker.getPosition();
                 //icon[iconNo] = void 0;//void 0 によりundefinedを代入
                 marker.setMap(null);
