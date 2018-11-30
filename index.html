@@ -135,14 +135,14 @@
       <input type="button" style="width:40%; font-size:50px;" value="範囲限定" onclick="initialize1()">
       <input type="button" style="width:40%; font-size:50px;" value="オープン" onclick="initialize2()">
       <form id="target">
-        <input name="hoge" type="radio" value="アイコン">アイコン
-        <input name="hoge" type="radio" value="コメント">コメント
-        <input name="hoge" type="radio" value="アイコン削除">アイコン削除
+        <input name="hoge" type="radio" value="アイコン" style="width:20%; height:30px;">アイコン
+        <input name="hoge" type="radio" value="コメント" style="width:20%; height:30px;">コメント
+        <input name="hoge" type="radio" value="アイコン削除" style="width:20%; height:30px;">アイコン削除
       </form>
     </p1>
     <p2 id="iconkinou">
     <form>
-      <select id="kimoti">
+      <select style="width:30%; height:40px" id="kimoti">
         <option value="bikkuri" selected>びっくり</option>
         <option value="heart">ハート</option>
         <option value="jaaku">邪悪</option>
@@ -150,9 +150,8 @@
         <option value="hikari">光</option>
       </select>
     </form>
-    <input type="file" accept="image/*" capture="camera" id="file-image">
+    <input type="file" accept="image/*" capture="camera" style="width:30%; height:40px;" id="file-image">
   </p2>
     <div id="map"></div>
-    <image id="test9"></image>
     </body>
 </html>
