@@ -551,11 +551,11 @@ function irasutoka(imgData) {
     var options = {width: 250, height: 250};
     canvas2.width = frameimg.width;
     canvas2.height = frameimg.height;
+    test9.src = imgData;//////////////
     //取得した座標を使って、画像を書き出し
     ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
     ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
     image = canvas2.toDataURL();
-    test9.src = image;//////////////
     iconArray.push(image);
     latlngArray.push(newlatlng);
     var marker = new google.maps.Marker({
