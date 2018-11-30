@@ -7,6 +7,7 @@
 	<script>
 	var can;
 	var ct;
+	var layer = [];
 	var ox=0,oy=0,x=0,y=0;
 	var mf=false;
 	  function mam_draw_init(){
@@ -74,13 +75,30 @@
 	    ct.fillStyle="rgb(255,255,255)";
 	    ct.fillRect(0,0,can.getBoundingClientRect().width,can.getBoundingClientRect().height);
 	  }
+		function iconka(){
+				var cc = document.createElement("canvas");
+				cc.width  = can.width();
+				cc.height = can.height();
+				for (var i = 0; i < layer.length; i++) {
+						layer[i].width = can.width() + "px";
+								layer[i].height = can.height() + "px";
+								cc.getContext("2d").drawImage(layer[i], 0, 0);
+								layer[i].width = 100 + "px";
+								layer[i].height = Math.floor(100 * can.height() / can.width()) + "px";
+						}
+				var imgData = cc.toDataURL();
+				window.opener.irasutoka(imgData);
+				window.open('about:blank', '_self').close();
+	  }
+
 	</script>
 	</head>
 	<body onload="mam_draw_init();">
 	    <h3>手書きお絵かきJavascriptサンプル</h3>
-	    <div style="border:solid 1px #000000;width:100%;" id="candiv">
-	      <canvas id="can" width="384px" height="400px"></canvas>
+	    <div style="border:solid 1px #000000;width:320px;" id="candiv">
+	      <canvas id="can" width="320px" height="400px"></canvas>
 	    </div>
-	    <input type="button" onClick="clearCan();" value="クリア" style="width:100;height:30;" data-inline="true" />
+	    <input type="button" onClick="clearCan();" value="クリア" style="width:100;height:50;" data-inline="true" />
+			<input type="button" onClick="iconka();" value="アイコン化" style="width:100;height:50;" data-inline="true" />
 	</body>
 	</html>

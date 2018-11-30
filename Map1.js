@@ -10,8 +10,8 @@ var c = 1;
 var iconNo = 0;
 var i = 0;
 var icon = [];
-var lat25 = 0.00022457872; //緯度２５m
-var lng25 = 0.00027415956; //経度２５m
+var lat25 = 0.00022457872*2; //緯度２５m
+var lng25 = 0.00027415956*2; //経度２５m
 var angle = 3.6;//100角形の内角
 var gmap;
 var test;
@@ -479,7 +479,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
             } else {
                 var irasuto_result = window.confirm("イラストを描きますか？");
                 if (irasuto_result){
-                    var subWin = window.open("freeHandWrite2.html","sub");
+                    var subWin = window.open("oekaki.html","sub");
                     iconPosition = marker.getPosition();
                     //icon[iconNo] = void 0;//void 0 によりundefinedを代入
                     marker.setMap(null);
@@ -996,6 +996,11 @@ function iconload(){
 }
 
 function dataClear(){
-  var id = 1;
-db.mapdata.delete(id);
+  db.delete().then(() => {
+    console.log("Database successfully deleted");
+}).catch((err) => {
+    console.error("Could not delete database");
+}).finally(() => {
+    // Do what should be done next...
+});
 }
