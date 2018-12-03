@@ -797,7 +797,7 @@ function load(){
       points = JSON.parse(data.points);
       console.log(points);
       //getPosition();
-      navigator.geolocation.getCurrentPosition(
+      /*navigator.geolocation.getCurrentPosition(
           // 取得成功した場合
           function(position) {
               var ido = position.coords.latitude; //取得した緯度
@@ -806,12 +806,12 @@ function load(){
               console.log("最初の緯度:"+ ido);
               console.log("最初の経度:"+ keido);
               console.log("最初の精度:"+ gosa);
-              if(gosa <= 2000){
+              if(gosa <= 5000){*/
     　             //精度が６０m以下の時にポリゴンを表示
                   //newlatlng = new google.maps.LatLng(ido,keido);
                   map = new google.maps.Map(document.getElementById('map'), {
                       zoom: 19,
-                      center: new google.maps.LatLng(ido,keido),
+                      center: new google.maps.LatLng(37.912021,139.061871),
                       minZoom : 8.5,//３０km
                       styles: [{
                           "stylers": [{
@@ -872,34 +872,8 @@ function load(){
                       getClickLatLng(e.latLng, map);
                   });
                   //setTimeout(loop1,1000);//1秒後に実行
-              }else{
-                  initialize();
+                });
               }
-          },
-      // 取得失敗した場合
-      function(error) {
-          switch(error.code) {
-              case 1: //PERMISSION_DENIED
-                  alert("位置情報の利用が許可されていません");
-              break;
-              case 2: //POSITION_UNAVAILABLE
-                  alert("現在位置が取得できませんでした");
-              break;
-              case 3: //TIMEOUT
-                  alert("タイムアウトになりました");
-              break;
-              default:
-                  alert("その他のエラー(エラーコード:"+error.code+")");
-              break;
-          }
-      },{
-          enableHighAccuracy: true,
-      });
-    });
-
-
-
-}
 
 function iconhozon(){
   //test2 = JSON.stringify(test2);
