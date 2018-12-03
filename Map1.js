@@ -793,7 +793,7 @@ function load(){
       console.log(h);
     });
     */
-    db.mapdata.get(1).then(function (data){
+    db.mapdata.get(4).then(function (data){
       points = JSON.parse(data.points);
       console.log(points);
       //getPosition();
