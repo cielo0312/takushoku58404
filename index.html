@@ -41,6 +41,21 @@
           overflow-y: auto;
       }
 
+      #overlay3 {
+          position: fixed;
+          display: none;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: rgba(0,0,0,0.5);
+          z-index: 2;
+          cursor: pointer;
+          overflow-y: auto;
+      }
+
       #color {
         list-style: none;
         overflow: hidden;
@@ -120,6 +135,7 @@
     <button onclick="iconload()">アイコン読み込み</button>
     <button onclick="hozon()">地図の保存</button>
     <button onclick="load()">地図の読み込み</button>
+    <button onclick="comment_load()">コメント読み込み</button>
     <button onclick="dataClear()">地図を消す</button>
     <li><a href="#" id="option" onclick="option()">オプション</a></li>
 
@@ -131,6 +147,13 @@
         <li4><a href="#" id="black" onclick="colorChange(this)">MENU4</a></li4>
       </ul>
     </div>
+    <div id="overlay3" onclick="off3()">
+      <a href="#"id="bikkuri" onclick="frame(this);"><img src="star5.png" width="200" height="200"></a>
+      <a href="#" id="heart" onclick="frame(this);"><img src="heart.png" width="200" height="200"></a>
+      <a href="#" id="jaaku" onclick="frame(this);"><img src="kowai.png" width="200" height="200"></a>
+      <a href="#" id="hatena" onclick="frame(this);"><img src="hatena.png" width="200" height="200"></a>
+      <a href="#" id="hikari" onclick="frame(this);"><img src="hikari.png" width="200" height="200"></a>
+    </div>
     <p1>
       <input type="button" style="width:40%; font-size:50px;" value="範囲限定" onclick="initialize1()">
       <input type="button" style="width:40%; font-size:50px;" value="オープン" onclick="initialize2()">
@@ -140,7 +163,8 @@
         <input name="hoge" type="radio" value="アイコン削除" style="width:20%; height:30px;">アイコン削除
       </form>
     </p1>
-    <p2 id="iconkinou">
+    <!--<p2 id="iconkinou">
+
     <form>
       <select style="width:30%; height:40px" id="kimoti">
         <option value="bikkuri" selected>びっくり</option>
@@ -149,9 +173,9 @@
         <option value="hatena">謎</option>
         <option value="hikari">光</option>
       </select>
-    </form>
+    </form>-->
     <input type="file" accept="image/*" capture="camera" style="width:30%; height:40px;" id="file-image">
-  </p2>
+  <!--</p2>-->
     <div id="map"></div>
     </body>
 </html>

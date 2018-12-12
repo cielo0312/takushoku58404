@@ -4,12 +4,14 @@
 	  <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	  <title>Mam 手書きお絵かきJavascriptサンプル</title>
 	  <meta name="viewport" content="width=device-width,init-scale=1,user-scalable=no,minimum-scale=1,maximum-scale=1">
+
 	<script>
 	var can;
 	var ct;
 	var layer = [];
 	var ox=0,oy=0,x=0,y=0;
 	var mf=false;
+	var color = "#000000";
 	  function mam_draw_init(){
 	    //初期設定
 	    can=document.getElementById("can");
@@ -20,7 +22,7 @@
 	    can.addEventListener("mousemove",onMouseMove,false);
 	    can.addEventListener("mouseup",onMouseUp,false);
 	    ct=can.getContext("2d");
-	    ct.strokeStyle="#000000";
+	    ct.strokeStyle=color;
 	    ct.lineWidth=5;
 	    ct.lineJoin="round";
 	    ct.lineCap="round";
@@ -78,18 +80,41 @@
 		function iconka(){
 				var imgData = can.toDataURL();
 				window.opener.irasutoka(imgData);
-				window.open('about:blank', '_self').close();
+				console.log(imgData);
+				//window.open('about:blank', '_self').close();
 	  }
+		function draw_color(c){
+				switch (c.id) {
+					case "red":
+							color = "#CC0000";
+						break;
+					case "blue":
+							color = "#0C00CC";
+						break;
+					case "green":
+							color = "#00FF41";
+						break;
+					case "black":
+							color = "#262626";
+						break;
+				}
+				ct.strokeStyle=color;
+		}
 
 	</script>
 	</head>
 	<body onload="mam_draw_init();">
-	    <h3>手書きお絵かきJavascriptサンプル</h3>
-	    <div style="border:solid 1px #000000;width:320px;" id="candiv">
-	      <canvas id="can" width="320px" height="400px"></canvas>
+			<ul>
+        <li1><a href="#" id="red" onclick="draw_color(this)">赤</a></li1>
+        <li2><a href="#" id="blue" onclick="draw_color(this)">青</a></li2>
+        <li3><a href="#" id="green" onclick="draw_color(this)">緑</a></li3>
+        <li4><a href="#" id="black" onclick="draw_color(this)">黒</a></li4>
+      </ul>
+	    <div style="border:solid 1px #000000;width:302px;" id="candiv">
+	      <canvas id="can" width="300px" height="300px"></canvas>
 	    </div>
-			<image id="test"></image>
 	    <input type="button" onClick="clearCan();" value="クリア" style="width:100;height:50;" data-inline="true" />
 			<input type="button" onClick="iconka();" value="アイコン化" style="width:100;height:50;" data-inline="true" />
+
 	</body>
 	</html>

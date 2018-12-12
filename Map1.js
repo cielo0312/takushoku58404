@@ -16,6 +16,8 @@ var angle = 3.6;//100角形の内角
 var gmap;
 var test;
 var test2;
+var comment_save = [];
+var comment_pos = [];
 var iconArray = [];
 var latlngArray = [];
 var subIconArray = [];
@@ -27,6 +29,13 @@ var iconPosition;
 var iconCounter = 0;
 var iconhokan = [];
 var flag = [];
+var user;
+var set_img;
+var set_x;
+var set_y;
+var set_w;
+var set_h;
+var id = 1;
 var db = new Dexie("地図データ");
 db.version(1).stores({
   mapdata: "++id"
@@ -158,6 +167,14 @@ function initialize1() {
                     });
 
                     x.setMap(map);//mapにポリゴンを表示
+                    user = new google.maps.Marker({
+                        position: newlatlng,
+                        map: map,
+                        icon: {
+                            url: "aruku.png",
+                            scaledSize: new google.maps.Size(50, 50)
+                        }
+                    });
 
                     map.addListener('click', function(e) {//クリックした時の処理
                         getClickLatLng(e.latLng, map);
@@ -165,7 +182,7 @@ function initialize1() {
 
                     setTimeout(loop1,1000);//５秒後に実行
             }else{
-                initialize();
+                initialize1();
             }
         },
         // 取得失敗した場合
@@ -205,6 +222,8 @@ function getClickLatLng(lat_lng, map) {
         //コメント
         var comment = window.prompt("何かひとこと", "");
         if(comment != "" && comment != null){
+            comment_save.push(comment);
+            comment_pos.push(lat_lng);
             var iw = new google.maps.InfoWindow({
                 position: lat_lng,
                 content: comment
@@ -290,6 +309,15 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             });
             //マップ上にポリゴンを表示
             x.setMap(map);
+            user.setMap(null);
+            user = new google.maps.Marker({
+                position: newlatlng,
+                map: map,
+                icon: {
+                    url: "aruku.png",
+                    scaledSize: new google.maps.Size(50, 50)
+                }
+            });
             setTimeout(loop1,1000);
             }else {
                 loop1();
@@ -396,11 +424,23 @@ function readDrawImg(reader, canvas, x, y){
         if(_ua.Mobile[0]){
             var resize = resizeWidthHeight(1024, w, h);
             printWidthHeight( 'dst-width-height', resize.flag, resize.w, resize.h);
-            drawImgOnCav(canvas, img, x, y, resize.w, resize.h);
+            set_img = img;
+            set_x = x;
+            set_y = y;
+            set_w = resize.w;
+            set_h = resize.h;
+            on3();
+            //drawImgOnCav(canvas, img, x, y, resize.w, resize.h);
         }else{
             // モバイル以外では元サイズ
             printWidthHeight( 'dst-width-height', false, 0, 0);
-            drawImgOnCav(canvas, img, x, y, w, h);
+            set_img = img;
+            set_x = x;
+            set_y = y;
+            set_w = w;
+            set_h = h;
+            on3();
+            //drawImgOnCav(canvas, img, x, y, w, h);
         }
     }
 }
@@ -416,9 +456,8 @@ function readImg(reader){
 
 //キャンバスにImageを表示
 function drawImgOnCav(canvas, img, x, y, w, h) {
-    var obj = document.getElementById("kimoti");
-    var kimoti = obj.value;
-    frame(kimoti);
+    //var obj = document.getElementById("kimoti");
+    //var kimoti = obj.value;
     var ctx = canvas.getContext("2d");
     var options = {width: 250, height: 250};
     SmartCrop.crop(img, options, function(result) {
@@ -431,7 +470,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
         ctx.drawImage(frameimg, 0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, crop.x, crop.y, crop.width, crop.height, 130, 130, options.width, options.height);
         var markerimg = canvas.toDataURL();
-        iconhokan.push(markerimg);
+        //iconhokan.push(markerimg);
         iconArray.push(markerimg);
         latlngArray.push(newlatlng);
         var marker = new google.maps.Marker({
@@ -544,9 +583,8 @@ function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
     var irasutoimg = new Image();
     irasutoimg.src = imgData;
-    var obj = document.getElementById("kimoti");
-    var kimoti = obj.value;
-    frame(kimoti);
+    //var obj = document.getElementById("kimoti");
+    //var kimoti = obj.value;
     var ctx = canvas2.getContext("2d");
     var options = {width: 250, height: 250};
     canvas2.width = frameimg.width;
@@ -554,11 +592,13 @@ function irasutoka(imgData) {
     //取得した座標を使って、画像を書き出し
     ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
     ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
-    image = canvas2.toDataURL();
+    var image = canvas2.toDataURL();
+    console.log(irasutoimg);
+    //console.log(test);
     iconArray.push(image);
-    latlngArray.push(newlatlng);
+    latlngArray.push(iconPosition);
     var marker = new google.maps.Marker({
-        position: newlatlng,
+        position: iconPosition,
         map: map,
         icon: {
             url: image,
@@ -652,7 +692,9 @@ function irasutoka(imgData) {
 });*/
 }
 //フレーム画像の選択
-function frame (kimoti){
+function frame (select_kimoti){
+  var kimoti = select_kimoti.id;
+  console.log(kimoti);
     switch (kimoti) {
         case "bikkuri":
         frameimg.src = "star5.png";
@@ -674,14 +716,31 @@ function frame (kimoti){
         frameimg.src = "hikari.png";
         break;
     }
+    drawImgOnCav(canvas, set_img, set_x, set_y, set_w, set_h);
 }
 
 function on() {
     document.getElementById("overlay").style.display = "block";
 }
 
+function on2() {
+    document.getElementById("overlay2").style.display = "block";
+}
+
+function on3() {
+    document.getElementById("overlay3").style.display = "block";
+}
+
 function off() {
     document.getElementById("overlay").style.display = "none";
+}
+
+function off2() {
+    document.getElementById("overlay2").style.display = "none";
+}
+
+function off3() {
+    document.getElementById("overlay3").style.display = "none";
 }
 
 function imgClick(select_icon){
@@ -784,7 +843,7 @@ function hozon(){
   var boundsJ = JSON.stringify(bounds);
   test2 = JSON.stringify(test2);
   console.log(pointsJ);
-  db.mapdata.put({points: pointsJ, icon: test, latlng: test2});
+  db.mapdata.update(id, {points: pointsJ, icon: test, latlng: test2});
 }
 
 function load(){
@@ -793,7 +852,7 @@ function load(){
       console.log(h);
     });
     */
-    db.mapdata.get(4).then(function (data){
+    db.mapdata.get(1).then(function (data){
       points = JSON.parse(data.points);
       console.log(points);
       //getPosition();
@@ -877,13 +936,14 @@ function load(){
 
 function iconhozon(){
   //test2 = JSON.stringify(test2);
-  db.mapdata.put({points: JSON.stringify(points),icon: JSON.stringify(iconArray), subIcon: JSON.stringify(subIconArray),
-    latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray)});
+  db.mapdata.put({id: 1, points: JSON.stringify(points),icon: JSON.stringify(iconArray), subIcon: JSON.stringify(subIconArray),
+    latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray), comment: JSON.stringify(comment_save),
+    comment_pos: JSON.stringify(comment_pos)});
 }
 
 
 function iconload(){
-  db.mapdata.get(4).then(function (data){
+  db.mapdata.get(1).then(function (data){
     //test = data.icon;
     //console.log(test);
     iconArray = JSON.parse(data.icon);
@@ -967,6 +1027,22 @@ function iconload(){
       });
     }
   });
+}
+
+function comment_load(){
+    db.mapdata.get(1).then(function (data){
+        comment_save = JSON.parse(data.comment);
+        comment_pos = JSON.parse(data.comment_pos);
+        for(var k = 0; k < comment_save.length; k++){
+            if(comment_save[k] != "" && comment_save[k] != null){
+                var iw = new google.maps.InfoWindow({
+                    position: comment_pos[k],
+                    content: comment_save[k]
+                });
+                iw.open(map);//コメントの表示
+            }
+        }
+    });
 }
 
 function dataClear(){

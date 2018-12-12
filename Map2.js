@@ -16,6 +16,7 @@ var mapColor = "#00f900";
 var polypath1 = [];
 var bounds = [];
 var points =[];
+var user;
 var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
 //var lat25 = 0.00022457872; //緯度２５m
@@ -149,6 +150,14 @@ function initialize2() {
                     });
 
                     x.setMap(map);//mapにポリゴンを表示
+                    user = new google.maps.Marker({
+                        position: newlatlng,
+                        map: map,
+                        icon: {
+                            url: "aruku.png",
+                            scaledSize: new google.maps.Size(50, 50)
+                        }
+                    });
 
                 map.addListener('click', function(e) {//クリックした時の処理
                     getClickLatLng(e.latLng, map);
@@ -181,7 +190,7 @@ function initialize2() {
     );
 }
 
-function getClickLatLng(lat_lng, map) {
+/*function getClickLatLng(lat_lng, map) {
     var element = document.getElementById( "target" ) ;
     var radioNodeList = element.hoge ;
     var a = radioNodeList.value ;
@@ -210,7 +219,7 @@ function getClickLatLng(lat_lng, map) {
       iconNo += 1;
       icon.setMap(map);//アイコン表示
 */
-    }
+  /*  }
     if(a == "コメント"){
         //コメント
         var comment = window.prompt("何かひとこと", "");
@@ -222,7 +231,7 @@ function getClickLatLng(lat_lng, map) {
             iw.open(map);//コメントの表示
         }
     }
-}
+}*/
 
 function loop2(/*polyline*/){//holeLayer2を時間差で表示する
               /*
@@ -304,6 +313,15 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         });
                         //マップ上にポリゴンを表示
                         x.setMap(map);
+                        user.setMap(null);
+                        user = new google.maps.Marker({
+                            position: newlatlng,
+                            map: map,
+                            icon: {
+                                url: "aruku.png",
+                                scaledSize: new google.maps.Size(50, 50)
+                            }
+                        });
 
             setTimeout(loop2(/*polyline*/),1000);
             } else {
@@ -887,19 +905,18 @@ function dataClear(){
 */
 function colorChange(color){
     //var colorID = color.id;
-    console.log(color.id);
     switch (color.id) {
       case "red":
-          mapColor = "#ff0000";
+          mapColor = "#CC0000";
         break;
       case "blue":
-          mapColor = "#0000ff";
+          mapColor = "#0C00CC";
         break;
       case "green":
-          mapColor = "#00ff00";
+          mapColor = "#00FF41";
         break;
       case "black":
-          mapColor = "#000000";
+          mapColor = "#262626";
         break;
     }
     var mapOPT = {
@@ -948,8 +965,7 @@ function colorChange(color){
     };
     map.setOptions(mapOPT);
 }
-/*
+
 function option(){
     setTimeout(on2(), 1000);
 }
-*/
