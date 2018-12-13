@@ -8,6 +8,7 @@ var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
 var c = 1;
 var iconNo = 0;
+var picture;
 var i = 0;
 var icon = [];
 var lat25 = 0.00022457872*2; //緯度２５m
@@ -351,7 +352,9 @@ window.onload = function(){
     if ( checkFileApi() && checkCanvas(canvas) ){
         //ファイル選択
         var file_image = document.getElementById('file-image');
+        picture = file_image;
         file_image.addEventListener('change', selectReadfile, false);
+
     }
 }
 
@@ -535,6 +538,12 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
   iconNo += 1;
   icon.setMap(map);//アイコン表示
   */
+  var dlLink = document.createElement('a');
+        dlLink.href = picture;
+        dlLink.download = 'picture.png';
+        dlLink.innerText = '撮影した写真をダウンロード';
+  document.getElementById('picture').appendChild(dlLink);
+
 }
 
 function resize(marker, markerimg){

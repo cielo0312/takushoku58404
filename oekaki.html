@@ -88,6 +88,9 @@
 					case "red":
 							color = "#CC0000";
 						break;
+					case "yellow":
+							color = "#ffff00";
+						break;
 					case "blue":
 							color = "#0C00CC";
 						break;
@@ -96,6 +99,9 @@
 						break;
 					case "black":
 							color = "#262626";
+						break;
+					case "white":
+							color = "#ffffff";
 						break;
 				}
 				ct.strokeStyle=color;
@@ -106,9 +112,11 @@
 	<body onload="mam_draw_init();">
 			<ul>
         <li1><a href="#" id="red" onclick="draw_color(this)">赤</a></li1>
-        <li2><a href="#" id="blue" onclick="draw_color(this)">青</a></li2>
-        <li3><a href="#" id="green" onclick="draw_color(this)">緑</a></li3>
-        <li4><a href="#" id="black" onclick="draw_color(this)">黒</a></li4>
+				<li2><a href="#" id="yellow" onclick="draw_color(this)">黄</a></li2>
+        <li3><a href="#" id="blue" onclick="draw_color(this)">青</a></li3>
+        <li4><a href="#" id="green" onclick="draw_color(this)">緑</a></li4>
+        <li5><a href="#" id="black" onclick="draw_color(this)">黒</a></li5>
+				<li6><a href="#" id="white" onclick="draw_color(this)">白</a></li6>
       </ul>
 	    <div style="border:solid 1px #000000;width:302px;" id="candiv">
 	      <canvas id="can" width="300px" height="300px"></canvas>
