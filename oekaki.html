@@ -6,6 +6,7 @@
 	  <meta name="viewport" content="width=device-width,init-scale=1,user-scalable=no,minimum-scale=1,maximum-scale=1">
 
 	<script>
+
 	var can;
 	var ct;
 	var layer = [];
@@ -14,6 +15,9 @@
 	var color = "#000000";
 	  function mam_draw_init(){
 	    //初期設定
+			var sample_img = localStorage.getItem("sample");
+			sub.src = sample_img;
+			localStorage.removeItem("sample");
 	    can=document.getElementById("can");
 	    can.addEventListener("touchstart",onDown,false);
 	    can.addEventListener("touchmove",onMove,false);
@@ -110,6 +114,7 @@
 	</script>
 	</head>
 	<body onload="mam_draw_init();">
+			<img id="sub" height="300" width="300">
 			<ul>
         <li1><a href="#" id="red" onclick="draw_color(this)">赤</a></li1>
 				<li2><a href="#" id="yellow" onclick="draw_color(this)">黄</a></li2>

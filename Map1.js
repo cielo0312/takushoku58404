@@ -37,6 +37,7 @@ var set_y;
 var set_w;
 var set_h;
 var id = 1;
+var result_img;
 var db = new Dexie("地図データ");
 db.version(1).stores({
   mapdata: "++id"
@@ -408,6 +409,7 @@ var _ua = (function(u){
 //ファイルが選択されたら読み込む
 function selectReadfile(e) {
     var file = e.target.files;
+    result_img = file;
     var reader = new FileReader();
     //dataURL形式でファイルを読み込む
     reader.readAsDataURL(file[0]);
@@ -521,7 +523,9 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
             } else {
                 var irasuto_result = window.confirm("イラストを描きますか？");
                 if (irasuto_result){
+                    localStorage.setItem("sample", markerimg);
                     var subWin = window.open("oekaki.html","sub");
+
                     iconPosition = marker.getPosition();
                     //icon[iconNo] = void 0;//void 0 によりundefinedを代入
                     marker.setMap(null);
@@ -540,7 +544,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
   */
   var dlLink = document.createElement('a');
         dlLink.href = picture;
-        dlLink.download = 'picture.png';
+        dlLink.download = "WC.png";
         dlLink.innerText = '撮影した写真をダウンロード';
   document.getElementById('picture').appendChild(dlLink);
 
