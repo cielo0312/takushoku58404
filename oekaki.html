@@ -27,7 +27,7 @@
 	    can.addEventListener("mouseup",onMouseUp,false);
 	    ct=can.getContext("2d");
 	    ct.strokeStyle=color;
-	    ct.lineWidth=5;
+	    ct.lineWidth=10;
 	    ct.lineJoin="round";
 	    ct.lineCap="round";
 	    clearCan();
@@ -35,7 +35,7 @@
 	  function onDown(event){
 	    mf=true;
 	    ox=event.touches[0].pageX-event.target.getBoundingClientRect().left;
-	    oy=event.touches[0].pageY-event.target.getBoundingClientRect().top;
+	    oy=event.touches[0].pageY-event.target.getBoundingClientRect().top+150;
 	    event.stopPropagation();
 	  }
 	  function onMove(event){
@@ -71,6 +71,7 @@
 	  function onMouseUp(event){
 	    mf=false;
 	  }
+		
 	  function drawLine(){
 	    ct.beginPath();
 	    ct.moveTo(ox,oy);
