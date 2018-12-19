@@ -7,6 +7,7 @@ var points = []; //地図に表示するポリゴンの配列
 var bounds = []; //境界線の配列
 var JSTSpoly = []; //取得したポリゴンの配列
 var x; //ポリゴンのオプション
+var y;
 var c = 1;
 var iconNo = 0;
 var picture;
@@ -21,6 +22,7 @@ var test2;
 var comment_save = [];
 var comment_pos = [];
 var iconArray = [];
+var frameArray = [];
 var latlngArray = [];
 var subIconArray = [];
 var sublatlngArray = [];
@@ -320,7 +322,7 @@ function initialize2() {
                     JSTSpoly[0] = JSTSpoly1
                     poly[0] = jsts2googleMaps(JSTSpoly[0]);//holeLayer1を和集合ポリゴンに代入
                     points.push(poly[0]);//pathを結合する
-                    x = new google.maps.Polygon({
+                    y = new google.maps.Polygon({
                         paths: points,
                         strokeColor: '#0000ff',
                         strokeOpacity: 0.0,
@@ -329,7 +331,7 @@ function initialize2() {
                         fillOpacity: 0.5
                     });
 
-                    x.setMap(map);//mapにポリゴンを表示
+                    y.setMap(map);//mapにポリゴンを表示
                     user = new google.maps.Marker({
                         position: newlatlng,
                         map: map,
@@ -577,8 +579,8 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                             }
                         }
 
-                        x.setMap(null);//古いポリゴンを除去
-                        x = new google.maps.Polygon({
+                        y.setMap(null);//古いポリゴンを除去
+                        y = new google.maps.Polygon({
                             paths: points,
                             strokeColor: '#0000ff',
                             strokeOpacity: 0.0,
@@ -587,7 +589,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                             fillOpacity: 0.5
                         });
                         //マップ上にポリゴンを表示
-                        x.setMap(map);
+                        y.setMap(map);
                         user.setMap(null);
                         user = new google.maps.Marker({
                             position: newlatlng,
@@ -795,6 +797,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
                 var num = iconArray.indexOf(markerimg);
                 iconArray.splice(num, 1);
                 latlngArray.splice(num, 1);
+                frameArray.splice(num, 1);
             } else {
                 var irasuto_result = window.confirm("イラストを描きますか？");
                 if (irasuto_result){
@@ -807,6 +810,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
                     var num2 = iconArray.indexOf(markerimg);
                     iconArray.splice(num2, 1);
                     latlngArray.splice(num2, 1);
+                    frameArray.splice(num2, 1);
                 }
             }
         });
@@ -858,20 +862,23 @@ function printWidthHeight( width_height_id, flag, w, h) {
 
 function irasutoka(imgData) {
     var canvas2 = document.createElement('canvas');
+    var ctx = canvas2.getContext("2d");
     var irasutoimg = new Image();
     irasutoimg.src = imgData;
+    var options = {width: 250, height: 250};
     //var obj = document.getElementById("kimoti");
     //var kimoti = obj.value;
-    var ctx = canvas2.getContext("2d");
-    var options = {width: 250, height: 250};
+    /*db.mapdata.get(1).then(function (data){
+      frameArray = JSON.parse(data.frame);
+    }*/
+    //frameimg = frameArray
     canvas2.width = frameimg.width;
     canvas2.height = frameimg.height;
-    //取得した座標を使って、画像を書き出し
     ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
-    ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
+    //取得した座標を使って、画像を書き出し
+    setTimeout(function() {
+        ctx.drawImage(irasutoimg, 0, 0, irasutoimg.width, irasutoimg.height, 130, 130, options.width, options.height);
     var image = canvas2.toDataURL();
-    console.log(irasutoimg);
-    //console.log(test);
     iconArray.push(image);
     latlngArray.push(iconPosition);
     var marker = new google.maps.Marker({
@@ -918,6 +925,7 @@ function irasutoka(imgData) {
             var num3 = iconArray.indexOf(image);
             iconArray.splice(num3, 1);
             latlngArray.splice(num3, 1);
+            frameArray.splice(num3, 1);
         } else {
             var irasuto_result = window.confirm("イラストを描きますか？");
             if (irasuto_result){
@@ -929,33 +937,39 @@ function irasutoka(imgData) {
                 var num4 = iconArray.indexOf(image);
                 iconArray.splice(num4, 1);
                 latlngArray.splice(num4, 1);
+                frameArray.splice(num4, 1);
             }
         }
     });
+  },100);
 }
 //フレーム画像の選択
 function frame (select_kimoti){
   var kimoti = select_kimoti.id;
-  console.log(kimoti);
     switch (kimoti) {
         case "bikkuri":
         frameimg.src = "star5.png";
+        frameArray.push("star5.png");
         break;
 
         case "heart":
         frameimg.src = "heart.png";
+        frameArray.push("heart.png");
         break;
 
         case "jaaku":
         frameimg.src = "kowai.png";
+        frameArray.push("kowai.png");
         break;
 
         case "hatena":
         frameimg.src = "hatena.png";
+        frameArray.push("hatena.png");
         break;
 
         case "hikari":
         frameimg.src = "hikari.png";
+        frameArray.push("hikari.png");
         break;
     }
     drawImgOnCav(canvas, set_img, set_x, set_y, set_w, set_h);
@@ -1126,17 +1140,21 @@ function attachMessage(marker, markerimg2) {
             var num5 = iconArray.indexOf(markerimg2);
             iconArray.splice(num5, 1);
             latlngArray.splice(num5, 1);
+            frameArray.splice(num5, 1);
         } else {
             var irasuto_result = window.confirm("イラストを描きますか？");
             if (irasuto_result){
                 localStorage.setItem("sample", markerimg2);
-                var subWin = window.open("freeHandWrite2.html","sub");
+                var subWin = window.open("oekaki.html","sub");
                 iconPosition = marker.getPosition();
                 //icon[iconNo] = void 0;//void 0 によりundefinedを代入
                 marker.setMap(null);
                 var num6 = iconArray.indexOf(markerimg2);
+                frameimg.src = frameArray[num6];
+                console.log(frameimg);
                 iconArray.splice(num6, 1);
                 latlngArray.splice(num6, 1);
+                frameArray.splice(num6, 1);
             }
         }
     });
@@ -1245,9 +1263,11 @@ function load(){
 */
 function hozon(){
   //test2 = JSON.stringify(test2);
-  db.mapdata.put({id: 1, mode:mode,start: JSON.stringify(start_pos), points: JSON.stringify(points),icon: JSON.stringify(iconArray), subIcon: JSON.stringify(subIconArray),
-    latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray), comment: JSON.stringify(comment_save),
-    comment_pos: JSON.stringify(comment_pos)});
+  db.mapdata.put({id: 1, mode:mode,start: JSON.stringify(start_pos),
+    points: JSON.stringify(points),icon: JSON.stringify(iconArray),
+    frame: JSON.stringify(frameArray), subIcon: JSON.stringify(subIconArray),
+    latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray),
+    comment: JSON.stringify(comment_save),comment_pos: JSON.stringify(comment_pos)});
 }
 
 
@@ -1261,6 +1281,9 @@ function load(){
     subIconArray = JSON.parse(data.subIcon);
     latlngArray = JSON.parse(data.latlng);
     sublatlngArray = JSON.parse(data.sublatlng);
+    frameArray = JSON.parse(data.frame);
+    console.log(frameArray);
+    mode = data.mode;
     if(mode == 1){
     map = new google.maps.Map(document.getElementById('map'), {
         zoom: 19,
@@ -1390,7 +1413,7 @@ function load(){
          path: polypath,
     });
     */
-        x = new google.maps.Polygon({
+        y = new google.maps.Polygon({
             paths: points,
             strokeColor: '#0000ff',
             strokeOpacity: 0.0,
@@ -1399,7 +1422,7 @@ function load(){
             fillOpacity: 0.5
         });
 
-        x.setMap(map);//mapにポリゴンを表示
+        y.setMap(map);//mapにポリゴンを表示
 
     map.addListener('click', function(e) {//クリックした時の処理
         getClickLatLng(e.latLng, map);
