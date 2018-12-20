@@ -111,14 +111,14 @@ function initialize1() {
                           "stylers": [{
                               "visibility": "on"
                           },{
-                              "color": "#9CA7E2"
+                              "color": "#000000"
                             }]
                       },{
                             "featureType": "landscape",
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#00FF41"
+                                "color": "#000000"
                               }]
                         },{
                             "featureType": "administrative",
@@ -126,7 +126,7 @@ function initialize1() {
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#2f343b"
+                                "color": "#000000"
                               },{
                                   "weight": 1
                                 }]
@@ -135,7 +135,7 @@ function initialize1() {
                                 "stylers": [{
                                     "visibility": "on"
                                 },{
-                                    "color": "#DDDED3"
+                                    "color": "#000000"
                                   }]
                             },{
                                 "elementType": "labels",
@@ -173,10 +173,10 @@ function initialize1() {
                     console.log(bounds);
                     x = new google.maps.Polygon({
                         paths: points,
-                        strokeColor: '#ffffff',
+                        strokeColor: '#000000',
                         strokeOpacity: 1.0,
                         strokeWeight: 2,
-                        fillColor: '#ffffff',
+                        fillColor: '#000000',
                         fillOpacity: 1.0
                     });
 
@@ -465,10 +465,10 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             x.setMap(null);//古いポリゴンを除去
             x = new google.maps.Polygon({
                 paths: points,
-                strokeColor: '#ffffff',
+                strokeColor: '#000000',
                 strokeOpacity: 1.00,
                 strokeWeight: 2,
-                fillColor: '#ffffff',
+                fillColor: '#000000',
                 fillOpacity: 1.00
             });
             //マップ上にポリゴンを表示
