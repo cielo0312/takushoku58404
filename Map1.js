@@ -1282,7 +1282,8 @@ function load(){
     latlngArray = JSON.parse(data.latlng);
     sublatlngArray = JSON.parse(data.sublatlng);
     frameArray = JSON.parse(data.frame);
-    console.log(frameArray);
+    comment_save = JSON.parse(data.comment);
+    comment_pos = JSON.parse(data.comment_pos);
     mode = data.mode;
     if(mode == 1){
     map = new google.maps.Map(document.getElementById('map'), {
@@ -1509,6 +1510,16 @@ function load(){
           }
       });
       sub_attachMessage(submarker);
+    }
+
+    for(var k = 0; k < comment_save.length; k++){
+        if(comment_save[k] != "" && comment_save[k] != null){
+            var iw = new google.maps.InfoWindow({
+                position: comment_pos[k],
+                content: comment_save[k]
+            });
+            iw.open(map);//コメントの表示
+        }
     }
 
   });
