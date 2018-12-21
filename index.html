@@ -114,6 +114,56 @@
         padding: 0;
       }
 
+      .sample input{
+	       display: none;
+       }
+      .sample label{
+	       display: block;
+	       float: left;
+	       cursor: pointer;
+	       width: 100px;
+	       margin: 0;
+	       padding: 12px 5px;
+	       border-right: 1px solid #abb2b7;
+	       background: #bdc3c7;
+	       color: #555e64;
+	       font-size: 14px;
+	       text-align: center;
+	       line-height: 1;
+	       transition: .2s;
+      }
+      .sample label:first-of-type{
+	       border-radius: 3px 0 0 3px;
+      }
+      .sample label:last-of-type{
+	        border-right: 0px;
+	        border-radius: 0 3px 3px 0;
+      }
+      .sample input[type="radio"]:checked + label {
+	       background-color: #a1b91d;
+	        color: #fff;
+      }
+
+      .square_btn{
+    display: inline-block;
+    padding: 0.5em 1em;
+    text-decoration: none;
+    border-radius: 4px;
+    color: #ffffff;
+    background-image: -webkit-linear-gradient(#6795fd 0%, #67ceff 100%);
+    background-image: linear-gradient(#6795fd 0%, #67ceff 100%);
+    box-shadow: 0px 2px 2px rgba(0, 0, 0, 0.29);
+    border-bottom: solid 3px #5e7fca;
+  }
+
+  .square_btn:active{
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);
+    border-bottom: none;
+  }
+
     </style>
     <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
     <script type = "text/javascript" src="Map1.js"></script>
@@ -130,9 +180,14 @@
       <a href="#" id="shokuji" onclick="imgClick(this);"><img src="shokuji.png" width="200" height="200"></a>
       <a href="#" id="bus" onclick="imgClick(this);"><img src="bus.png" width="200" height="200"></a>
     </div>
+    <!--
     <button onclick="hozon()">冒険地図を保存</button>
     <button onclick="load()">冒険地図読み込み</button>
     <button onclick="dataClear()">地図を消す</button>
+  -->
+    <a href="#" class="square_btn" onclick="hozon()">冒険地図を保存</a>
+    <a href="#" class="square_btn" onclick="load()">冒険地図読み込み</a>
+    <a href="#" class="square_btn" onclick="dataClear()">地図を消す</a>
     <li><a href="#" id="option" onclick="option()">オプション</a></li>
 
     <div id="overlay2" onclick="off2()">
@@ -153,11 +208,21 @@
     <p1>
       <input type="button" style="width:40%; font-size:50px;" value="範囲限定" onclick="initialize1()">
       <input type="button" style="width:40%; font-size:50px;" value="オープン" onclick="initialize2()">
+      <div class="sample">
       <form id="target">
+        <input type="radio" name="hoge" id="select1" value="アイコン" checked="">
+          <label for="select1">アイコン作成</label>
+        <input type="radio" name="hoge" id="select2" value="アイコン削除">
+          <label for="select2">アイコン削除</label>
+        <input type="radio" name="hoge" id="select3" value="コメント">
+          <label for="select3">コメント作成</label>
+          <!--
         <input name="hoge" type="radio" value="アイコン" style="width:20%; height:30px;">アイコン
         <input name="hoge" type="radio" value="コメント" style="width:20%; height:30px;">コメント
         <input name="hoge" type="radio" value="アイコン削除" style="width:20%; height:30px;">アイコン削除
+      -->
       </form>
+      </div>
     </p1>
     <!--<p2 id="iconkinou">
 

@@ -111,14 +111,14 @@ function initialize1() {
                           "stylers": [{
                               "visibility": "on"
                           },{
-                              "color": "#000000"
+                              "color": "#9CA7E2"
                             }]
                       },{
                             "featureType": "landscape",
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#000000"
+                                "color": "#00FF41"
                               }]
                         },{
                             "featureType": "administrative",
@@ -126,7 +126,7 @@ function initialize1() {
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#000000"
+                                "color": "#2f343b"
                               },{
                                   "weight": 1
                                 }]
@@ -135,7 +135,7 @@ function initialize1() {
                                 "stylers": [{
                                     "visibility": "on"
                                 },{
-                                    "color": "#000000"
+                                    "color": "#DDDED3"
                                   }]
                             },{
                                 "elementType": "labels",
@@ -170,17 +170,17 @@ function initialize1() {
                     JSTSpoly[0] = JSTSpoly1
                     holePoly[0] = jsts2googleMaps(JSTSpoly[0]);//holeLayer1を和集合ポリゴンに代入
                     points = [kageLayer, holePoly[0]];//pathを結合する
-                    console.log(bounds);
                     x = new google.maps.Polygon({
                         paths: points,
-                        strokeColor: '#000000',
+                        strokeColor: '#ffffff',
                         strokeOpacity: 1.0,
                         strokeWeight: 2,
-                        fillColor: '#000000',
+                        fillColor: '#ffffff',
                         fillOpacity: 1.0
                     });
 
                     x.setMap(map);//mapにポリゴンを表示
+                    /*
                     user = new google.maps.Marker({
                         position: newlatlng,
                         map: map,
@@ -189,6 +189,7 @@ function initialize1() {
                             scaledSize: new google.maps.Size(300, 300)
                         }
                     });
+                    */
 
                     map.addListener('click', function(e) {//クリックした時の処理
                         getClickLatLng(e.latLng, map);
@@ -465,14 +466,15 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             x.setMap(null);//古いポリゴンを除去
             x = new google.maps.Polygon({
                 paths: points,
-                strokeColor: '#000000',
+                strokeColor: '#ffffff',
                 strokeOpacity: 1.00,
                 strokeWeight: 2,
-                fillColor: '#000000',
+                fillColor: '#ffffff',
                 fillOpacity: 1.00
             });
             //マップ上にポリゴンを表示
             x.setMap(map);
+            /*
             user.setMap(null);
             user = new google.maps.Marker({
                 position: newlatlng,
@@ -482,6 +484,7 @@ var loop1 = function(){//holeLayer2を時間差で表示する
                     scaledSize: new google.maps.Size(300, 300)
                 }
             });
+            */
             setTimeout(loop1,1000);
             }else {
                 loop1();
@@ -814,7 +817,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
                 }
             }
         });
-        marker.setMap(null);
+        //marker.setMap(null);
     });
 }
 
@@ -1262,12 +1265,16 @@ function load(){
               }
 */
 function hozon(){
+  var hozon_result = window.confirm("冒険地図を保存しますか？");
   //test2 = JSON.stringify(test2);
+  if (hozon_result){
   db.mapdata.put({id: 1, mode:mode,start: JSON.stringify(start_pos),
     points: JSON.stringify(points),icon: JSON.stringify(iconArray),
     frame: JSON.stringify(frameArray), subIcon: JSON.stringify(subIconArray),
     latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray),
     comment: JSON.stringify(comment_save),comment_pos: JSON.stringify(comment_pos)});
+  window.alert("冒険地図を保存しました");
+  }
 }
 
 
