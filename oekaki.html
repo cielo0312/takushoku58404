@@ -19,9 +19,9 @@
 			sub.src = sample_img;
 			localStorage.removeItem("sample");
 	    can=document.getElementById("can");
-	    can.addEventListener("touchstart",onMouseDown,false);
-	    can.addEventListener("touchmove",onMouseMove,false);
-	    can.addEventListener("touchend",onMouseUp,false);
+	    can.addEventListener("touchstart",onDown,false);
+	    can.addEventListener("touchmove",onMove,false);
+	    can.addEventListener("touchend",onUp,false);
 	    can.addEventListener("mousedown",onMouseDown,false);
 	    can.addEventListener("mousemove",onMouseMove,false);
 	    can.addEventListener("mouseup",onMouseUp,false);
