@@ -19,9 +19,9 @@
 			sub.src = sample_img;
 			localStorage.removeItem("sample");
 	    can=document.getElementById("can");
-	    can.addEventListener("touchstart",onDown,false);
-	    can.addEventListener("touchmove",onMove,false);
-	    can.addEventListener("touchend",onUp,false);
+	    can.addEventListener("touchstart",onMouseDown,false);
+	    can.addEventListener("touchmove",onMouseMove,false);
+	    can.addEventListener("touchend",onMouseUp,false);
 	    can.addEventListener("mousedown",onMouseDown,false);
 	    can.addEventListener("mousemove",onMouseMove,false);
 	    can.addEventListener("mouseup",onMouseUp,false);
@@ -35,7 +35,7 @@
 	  function onDown(event){
 	    mf=true;
 	    ox=event.touches[0].pageX-event.target.getBoundingClientRect().left;
-	    oy=event.touches[0].pageY-event.target.getBoundingClientRect().top+150;
+	    oy=event.touches[0].pageY-event.target.getBoundingClientRect().top;
 	    event.stopPropagation();
 	  }
 	  function onMove(event){
