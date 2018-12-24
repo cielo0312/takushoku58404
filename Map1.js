@@ -1264,11 +1264,13 @@ function load(){
                 });
               }
 */
-function hozon(){
+function hozon(h){
   var hozon_result = window.confirm("冒険地図を保存しますか？");
+
   //test2 = JSON.stringify(test2);
   if (hozon_result){
-  db.mapdata.put({id: 1, mode:mode,start: JSON.stringify(start_pos),
+  var id = h.id;
+  db.mapdata.put({id: id, mode:mode,start: JSON.stringify(start_pos),
     points: JSON.stringify(points),icon: JSON.stringify(iconArray),
     frame: JSON.stringify(frameArray), subIcon: JSON.stringify(subIconArray),
     latlng: JSON.stringify(latlngArray), sublatlng: JSON.stringify(sublatlngArray),
@@ -1278,8 +1280,9 @@ function hozon(){
 }
 
 
-function load(){
-  db.mapdata.get(1).then(function (data){
+function load(l){
+  var id = l.id;
+  db.mapdata.get(id).then(function (data){
     //test = data.icon;
     //console.log(test);
     start_pos = JSON.parse(data.start);
