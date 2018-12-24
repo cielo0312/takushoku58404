@@ -593,7 +593,6 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         });
                         //マップ上にポリゴンを表示
                         y.setMap(map);
-                        user.setMap(null);
                         /*
                         user = new google.maps.Marker({
                             position: newlatlng,
