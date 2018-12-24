@@ -111,14 +111,14 @@ function initialize1() {
                           "stylers": [{
                               "visibility": "on"
                           },{
-                              "color": "#9CA7E2"
+                              "color": "#000000"
                             }]
                       },{
                             "featureType": "landscape",
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#00FF41"
+                                "color": "#000000"
                               }]
                         },{
                             "featureType": "administrative",
@@ -126,7 +126,7 @@ function initialize1() {
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#2f343b"
+                                "color": "#000000"
                               },{
                                   "weight": 1
                                 }]
@@ -135,7 +135,7 @@ function initialize1() {
                                 "stylers": [{
                                     "visibility": "on"
                                 },{
-                                    "color": "#DDDED3"
+                                    "color": "#000000"
                                   }]
                             },{
                                 "elementType": "labels",
@@ -172,15 +172,15 @@ function initialize1() {
                     points = [kageLayer, holePoly[0]];//pathを結合する
                     x = new google.maps.Polygon({
                         paths: points,
-                        strokeColor: '#ffffff',
+                        strokeColor: '#000000',
                         strokeOpacity: 1.0,
                         strokeWeight: 2,
-                        fillColor: '#ffffff',
+                        fillColor: '#000000',
                         fillOpacity: 1.0
                     });
 
                     x.setMap(map);//mapにポリゴンを表示
-                    /*
+
                     user = new google.maps.Marker({
                         position: newlatlng,
                         map: map,
@@ -189,7 +189,7 @@ function initialize1() {
                             scaledSize: new google.maps.Size(300, 300)
                         }
                     });
-                    */
+
 
                     map.addListener('click', function(e) {//クリックした時の処理
                         getClickLatLng(e.latLng, map);
@@ -259,14 +259,14 @@ function initialize2() {
                           "stylers": [{
                               "visibility": "on"
                           },{
-                              "color": "#9CA7E2"
+                              "color": "#000000"
                             }]
                       },{
                             "featureType": "landscape", //風景
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": mapColor
+                                "color": "#000000"
                               }]
                         },{
                             "featureType": "administrative", //行政区画
@@ -274,7 +274,7 @@ function initialize2() {
                             "stylers": [{
                                 "visibility": "on"
                             },{
-                                "color": "#2f343b"
+                                "color": "#000000"
                               },{
                                   "weight": 1
                                 }]
@@ -283,7 +283,7 @@ function initialize2() {
                                 "stylers": [{
                                     "visibility": "on"
                                 },{
-                                    "color": "#DDDED3"
+                                    "color": "#000000"
                                   }]
                             },{
                                 "elementType": "labels", //地名などの表示
@@ -325,10 +325,10 @@ function initialize2() {
                     points.push(poly[0]);//pathを結合する
                     y = new google.maps.Polygon({
                         paths: points,
-                        strokeColor: '#0000ff',
+                        strokeColor: '#000000',
                         strokeOpacity: 0.0,
                         strokeWeight: 2,
-                        fillColor: '#0000ff',
+                        fillColor: '#000000',
                         fillOpacity: 0.5
                     });
 
@@ -337,8 +337,8 @@ function initialize2() {
                         position: newlatlng,
                         map: map,
                         icon: {
-                            url: "aruku.png",
-                            scaledSize: new google.maps.Size(50, 50)
+                            url: "sakuseichu.png",
+                            scaledSize: new google.maps.Size(300, 300)
                         }
                     });
 
@@ -466,10 +466,10 @@ var loop1 = function(){//holeLayer2を時間差で表示する
             x.setMap(null);//古いポリゴンを除去
             x = new google.maps.Polygon({
                 paths: points,
-                strokeColor: '#ffffff',
+                strokeColor: '#000000',
                 strokeOpacity: 1.00,
                 strokeWeight: 2,
-                fillColor: '#ffffff',
+                fillColor: '#000000',
                 fillOpacity: 1.00
             });
             //マップ上にポリゴンを表示
@@ -585,15 +585,16 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         y.setMap(null);//古いポリゴンを除去
                         y = new google.maps.Polygon({
                             paths: points,
-                            strokeColor: '#0000ff',
+                            strokeColor: '#000000',
                             strokeOpacity: 0.0,
                             strokeWeight: 2,
-                            fillColor: '#0000ff',
+                            fillColor: '#000000',
                             fillOpacity: 0.5
                         });
                         //マップ上にポリゴンを表示
                         y.setMap(map);
                         user.setMap(null);
+                        /*
                         user = new google.maps.Marker({
                             position: newlatlng,
                             map: map,
@@ -601,7 +602,7 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                                 url: "aruku.png",
                                 scaledSize: new google.maps.Size(50, 50)
                             }
-                        });
+                        });*/
 
             setTimeout(loop2(/*polyline*/),1000);
             } else {
@@ -817,7 +818,7 @@ function drawImgOnCav(canvas, img, x, y, w, h) {
                 }
             }
         });
-        //marker.setMap(null);
+        marker.setMap(null);
     });
 }
 
