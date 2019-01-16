@@ -1,4 +1,4 @@
-//Map.js
+//Map1.js
 var start_pos;
 var holeLayer1 = []; //穴の緯度経度の配列
 var map; //googleマップの情報を入れる
@@ -869,12 +869,6 @@ function irasutoka(imgData) {
     var irasutoimg = new Image();
     irasutoimg.src = imgData;
     var options = {width: 250, height: 250};
-    //var obj = document.getElementById("kimoti");
-    //var kimoti = obj.value;
-    /*db.mapdata.get(1).then(function (data){
-      frameArray = JSON.parse(data.frame);
-    }*/
-    //frameimg = frameArray
     canvas2.width = frameimg.width;
     canvas2.height = frameimg.height;
     ctx.drawImage(frameimg, 0, 0, canvas2.width, canvas2.height);
@@ -1628,4 +1622,11 @@ function colorChange(color){
 
 function option(){
     setTimeout(on2(), 1000);
+}
+
+function reload(){
+    var r = window.confirm("ホームへ戻りますか？");
+    if (r){
+        location.reload();
+    }
 }

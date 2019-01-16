@@ -1,3 +1,4 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
   <head>
@@ -164,6 +165,35 @@
     border-bottom: none;
   }
 
+  .camerabtn {
+  display: inline-block;
+  padding: 5px;
+  width: 200px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  background-color: #55f;
+  color: white;
+  box-shadow: #888 2px 2px 1px;
+  cursor: pointer;
+}
+.camerabtn:hover {
+  background-color: #88f;
+}
+.camerabtn:hover {
+  background-color: #88f;
+}
+.camerabtn:active {
+  box-shadow: #888 1px 1px 1px;
+  position: relative;
+  top: 1px; left: 1px;
+}
+.camerabtn input {
+  display: none;
+}
+
     </style>
     <script src="https://unpkg.com/dexie@latest/dist/dexie.js"></script>
     <script type = "text/javascript" src="Map1.js"></script>
@@ -180,11 +210,6 @@
       <a href="#" id="shokuji" onclick="imgClick(this);"><img src="shokuji.png" width="200" height="200"></a>
       <a href="#" id="bus" onclick="imgClick(this);"><img src="bus.png" width="200" height="200"></a>
     </div>
-    <!--
-    <button onclick="hozon()">冒険地図を保存</button>
-    <button onclick="load()">冒険地図読み込み</button>
-    <button onclick="dataClear()">地図を消す</button>
-  -->
     <a href="#" class="square_btn" id="1" onclick="hozon(this)">冒険地図1に保存</a>
     <a href="#" class="square_btn" id="2" onclick="hozon(this)">冒険地図2に保存</a>
     <a href="#" class="square_btn" id="3" onclick="hozon(this)">冒険地図3に保存</a>
@@ -192,6 +217,7 @@
     <a href="#" class="square_btn" id="2" onclick="load(this)">冒険地図２読み込み</a>
     <a href="#" class="square_btn" id="3" onclick="load(this)">冒険地図３読み込み</a>
     <a href="#" class="square_btn" onclick="dataClear()">地図を消す</a>
+    <a href="#" class="square_btn" onclick="reload()">ホーム</a>
     <li><a href="#" id="option" onclick="option()">オプション</a></li>
 
     <div id="overlay2" onclick="off2()">
@@ -220,27 +246,13 @@
           <label for="select2">アイコン削除</label>
         <input type="radio" name="hoge" id="select3" value="コメント">
           <label for="select3">コメント作成</label>
-          <!--
-        <input name="hoge" type="radio" value="アイコン" style="width:20%; height:30px;">アイコン
-        <input name="hoge" type="radio" value="コメント" style="width:20%; height:30px;">コメント
-        <input name="hoge" type="radio" value="アイコン削除" style="width:20%; height:30px;">アイコン削除
-      -->
       </form>
       </div>
     </p1>
-    <!--<p2 id="iconkinou">
-
-    <form>
-      <select style="width:30%; height:40px" id="kimoti">
-        <option value="bikkuri" selected>びっくり</option>
-        <option value="heart">ハート</option>
-        <option value="jaaku">邪悪</option>
-        <option value="hatena">謎</option>
-        <option value="hikari">光</option>
-      </select>
-    </form>-->
-    <input type="file" accept="image/*" capture="camera" style="width:30%; height:40px;" id="file-image"><div id="picture"></div>
-  <!--</p2>-->
+    <label class="camerabtn">
+      カメラ
+    <input type="file" accept="image/*" capture="camera" style="width:30%; height:40px;" id="file-image">
+    </label>
     <div id="map"></div>
     </body>
 </html>
