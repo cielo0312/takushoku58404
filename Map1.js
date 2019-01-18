@@ -96,6 +96,8 @@ function initialize1() {
             if(gosa <= 2000){
               //精度が６０m以下の時にポリゴンを表示
                 mode = 1;
+                document.getElementById("btn1").style.display="none";
+                document.getElementById("btn2").style.display="none";
                 start_pos = new google.maps.LatLng(ido,keido);
                 newlatlng = new google.maps.LatLng(ido,keido);
                 map = new google.maps.Map(document.getElementById('map'), {
@@ -513,7 +515,7 @@ var loop1 = function(){//holeLayer2を時間差で表示する
     );
 }
 
-function loop2(/*polyline*/){//holeLayer2を時間差で表示する
+function loop2(){//holeLayer2を時間差で表示する
               /*
                 //精度が６０m以下のときポリゴンを追加
                 polypath.push(new google.maps.LatLng(ido2, keido2));
@@ -593,19 +595,11 @@ function loop2(/*polyline*/){//holeLayer2を時間差で表示する
                         });
                         //マップ上にポリゴンを表示
                         y.setMap(map);
-                        /*
-                        user = new google.maps.Marker({
-                            position: newlatlng,
-                            map: map,
-                            icon: {
-                                url: "aruku.png",
-                                scaledSize: new google.maps.Size(50, 50)
-                            }
-                        });*/
 
-            setTimeout(loop2(/*polyline*/),1000);
+
+            setTimeout(loop2(),1000);
             } else {
-                loop2(/*polyline*/);
+                loop2();
             }
         },
         // 取得失敗した場合
@@ -1279,6 +1273,8 @@ function load(l){
   db.mapdata.get(id).then(function (data){
     //test = data.icon;
     //console.log(test);
+    document.getElementById("btn1").style.display="none";
+    document.getElementById("btn2").style.display="none";
     start_pos = JSON.parse(data.start);
     points = JSON.parse(data.points);
     iconArray = JSON.parse(data.icon);

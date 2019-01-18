@@ -5,7 +5,104 @@
 	  <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	  <title>Mam 手書きお絵かきJavascriptサンプル</title>
 	  <meta name="viewport" content="width=device-width,init-scale=1,user-scalable=no,minimum-scale=1,maximum-scale=1">
-
+		<style>
+		.red{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #CC0000;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+		}
+		.red {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		.yellow{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #ffff00;/*ボタン色*/
+    color: #000;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+		}
+		.yellow {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		.blue{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #0C00CC;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+		}
+		.blue {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		.green{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #00FF41;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+		}
+		.green {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		.black{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #262626;/*ボタン色*/
+    color: #FFF;
+    border-bottom: solid 4px #627295;
+    border-radius: 3px;
+		}
+		.black {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		.white{
+    display: inline-block;
+    padding: 0.5em 0.7em;
+    text-decoration: none;
+    background: #ffffff;/*ボタン色*/
+    color: #000;
+    border-bottom: solid 4px #000000;
+    border-radius: 3px;
+		}
+		.white {/*ボタンを押したとき*/
+    -ms-transform: translateY(4px);
+    -webkit-transform: translateY(4px);
+    transform: translateY(4px);/*下に動く*/
+    box-shadow: 0px 0px 1px rgba(0, 0, 0, 0.2);/*影を小さく*/
+    border-bottom: none;
+		}
+		</style>
 	<script>
 
 	var can;
@@ -118,12 +215,12 @@
 	<body onload="mam_draw_init();">
 			<img id="sub" height="200" width="200">
 			<ul>
-        <li1><a href="#" id="red" onclick="draw_color(this)">赤</a></li1>
-				<li2><a href="#" id="yellow" onclick="draw_color(this)">黄</a></li2>
-        <li3><a href="#" id="blue" onclick="draw_color(this)">青</a></li3>
-        <li4><a href="#" id="green" onclick="draw_color(this)">緑</a></li4>
-        <li5><a href="#" id="black" onclick="draw_color(this)">黒</a></li5>
-				<li6><a href="#" id="white" onclick="draw_color(this)">白</a></li6>
+        <a href="#" class="red" id="red" onclick="draw_color(this)">赤</a>
+				<a href="#" class="yellow" id="yellow" onclick="draw_color(this)">黄</a>
+        <a href="#" class="blue" id="blue" onclick="draw_color(this)">青</a>
+        <a href="#" class="green" id="green" onclick="draw_color(this)">緑</a>
+        <a href="#" class="black" id="black" onclick="draw_color(this)">黒</a>
+				<a href="#" class="white" id="white" onclick="draw_color(this)">白</a>
       </ul>
 	    <div style="border:solid 1px #000000;width:302px;" id="candiv">
 	      <canvas id="can" width="300px" height="300px"></canvas>
